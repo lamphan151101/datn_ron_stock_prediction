@@ -14,6 +14,7 @@ import DashboardScreen from './pages/Dashboard/Dashboard';
 import MarketScreen from './pages/Market/MarketScreen';
 import CapitalScreen from './pages/Capital/CapitalScreen';
 import TransactionsScreen from './pages/Transactions/TransactionsScreen';
+import Home from './pages/Home/Home';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/MarketScreen" element={<MarketScreen />} />
           <Route path="/CapitalScreen" element={<CapitalScreen />} />
           <Route path="/TransactionsScreen" element={<TransactionsScreen />} />
+           <Route path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>

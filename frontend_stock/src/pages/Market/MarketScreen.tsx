@@ -51,7 +51,7 @@ const MarketScreen: React.FC = () => {
         <div className='flex flex-destroy'>
           <div className='content-30 box-right-padding'>
             <Market />
-            {coinInfo && <CoinVertical item={coinInfo} />}
+            {/* {coinInfo && <CoinVertical item={coinInfo} />} */}
           </div>
           <div className='content-70 flex-1'>
             {coinInfo && (

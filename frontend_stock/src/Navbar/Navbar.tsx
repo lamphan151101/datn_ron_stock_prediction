@@ -30,6 +30,9 @@ const Navbar: FC = memo(() => (
       </li>
       <li>
         <NavbarButton url='/capital' icon='equalizer' title='Market' />
+        </li>
+        <li>
+        <NavbarButton url='/home' icon='equalizer' title='home' />
       </li>
     </ul>
     <h3>Others</h3>

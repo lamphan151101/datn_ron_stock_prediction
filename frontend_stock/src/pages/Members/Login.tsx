@@ -18,17 +18,17 @@ interface FormValues {
 
 const Login: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+//   const dispatch = useAppDispatch();
     // const currentUser = useSelector((state: any) => state.auth.login.currentUser);
-    const [
-        loginUser,
-        {
-            data: loginData,
-            isSuccess: isLoginSuccess,
-            isError: isLoginError,
-            error: loginError
-        },
-    ] = useLoginUserMutation();
+    // const [
+    //     loginUser,
+    //     {
+    //         data: loginData,
+    //         isSuccess: isLoginSuccess,
+    //         isError: isLoginError,
+    //         error: loginError
+    //     },
+    // ] = useLoginUserMutation();
 
   const [formValues, setFormValues] = useState<FormValues>({
     userName: '',
@@ -46,22 +46,31 @@ const Login: FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
       e.preventDefault();
-      if (formValues.userName && formValues.password) {
-          await loginUser({email: formValues.userName, password: formValues.password})
-      }
-      else {
-          toast.error("please fill all fields")
-      }
-  };
-  console.log(isLoginSuccess)
-    useEffect(() => {
-        if (isLoginSuccess) {
-            toast.success("User Login Successfully");
-            dispatch(setUser({name: loginData.email}))
-            navigate('/MarketScreen');
+        console.log(formValues, 'aaaa')
+      const res = await httpClient.post("//localhost:5000/login", {
+          email: formValues.userName,
+          password: formValues.password
+      })
+      console.log(res, "res")
+      if (res.status === 200) {
+          navigate('/DashboardScreen');
         }
-    }, [isLoginSuccess])
-    console.log(loginError, 'loginError')
+    //   if (formValues.userName && formValues.password) {
+    //       await loginUser({email: formValues.userName, password: formValues.password})
+    //   }
+    //   else {
+    //       toast.error("please fill all fields")
+    //   }
+  };
+//   console.log(isLoginSuccess)
+//     useEffect(() => {
+//         if (isLoginSuccess) {
+//             toast.success("User Login Successfully");
+//             dispatch(setUser({name: loginData.email}))
+//             navigate('/MarketScreen');
+//         }
+//     }, [isLoginSuccess])
+//     console.log(loginError, 'loginError')
   return (
     <MainLayout>
       <div className='flex flex-center full-height'>

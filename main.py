@@ -29,7 +29,6 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dropout, Dense
 from sklearn.preprocessing import MinMaxScaler
 import math
-from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 
