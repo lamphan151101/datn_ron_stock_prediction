@@ -175,9 +175,9 @@ def contact_form():
         return render_template('message-sent.html')
 
 
-@app.route('/result', methods=['POST'])
+@app.route("/result", methods=['POST'])
 def result():
-    symbol = request.form['symbol']
+    symbol = request.json['symbol']
 
     # **************** FUNCTIONS TO FETCH DATA ***************************
 
@@ -550,13 +550,40 @@ def result():
         print("Forecasted Prices for Next 7 days:")
         print(forecast_set)
         today_stock = today_stock.round(2)
-        return render_template('result.html', quote=quote, arima_pred=round(arima_pred, 2), lstm_pred=round(lstm_pred, 2),
-                               lr_pred=round(lr_pred, 2), open_s=today_stock['Open'].to_string(index=False),
-                               close_s=today_stock['Close'].to_string(index=False), adj_close=today_stock['Adj Close'].to_string(index=False),
-                               news_list=news_list, overall_sentiment=overall_sentiment, idea=idea, decision=decision, high_s=today_stock['High'].to_string(
+        arima_pred = float(round(arima_pred, 2))
+        lstm_pred = float(round(lstm_pred, 2))
+        error_lr = float(round(error_lr, 2))
+        error_lstm = float(round(error_lstm, 2))
+        error_arima = float(round(error_arima, 2))
+        forecast_set = forecast_set.tolist()
+        return jsonify({
+            "quote": quote,
+            "arima_pred": arima_pred,
+            "lstm_pred": lstm_pred,
+            "open_s": today_stock['Open'].to_string(index=False),
+             "close_s":today_stock['Close'].to_string(index=False),
+             "adj_close":today_stock['Adj Close'].to_string(index=False),
+             "news_list":news_list,
+             "overall_sentiment":overall_sentiment,
+             "idea":idea,
+             "decision":decision,
+             "high_s":today_stock['High'].to_string(
                                    index=False),
-                               low_s=today_stock['Low'].to_string(index=False), vol=today_stock['Volume'].to_string(index=False),
-                               forecast_set=forecast_set, error_lr=round(error_lr, 2), error_lstm=round(error_lstm, 2), error_arima=round(error_arima, 2))
+            "low_s":today_stock['Low'].to_string(index=False),
+            "vol":today_stock['Volume'].to_string(index=False),
+            "forecast_set":forecast_set,
+            "error_lr":error_lr,
+            "error_lstm":error_lstm,
+            "error_arima":error_arima
+
+        })
+        # return render_template('result.html', quote=quote, arima_pred=round(arima_pred, 2), lstm_pred=round(lstm_pred, 2),
+        #                        lr_pred=round(lr_pred, 2), open_s=today_stock['Open'].to_string(index=False),
+        #                        close_s=today_stock['Close'].to_string(index=False), adj_close=today_stock['Adj Close'].to_string(index=False),
+        #                        news_list=news_list, overall_sentiment=overall_sentiment, idea=idea, decision=decision, high_s=today_stock['High'].to_string(
+        #                            index=False),
+        #                        low_s=today_stock['Low'].to_string(index=False), vol=today_stock['Volume'].to_string(index=False),
+        #                        forecast_set=forecast_set, error_lr=round(error_lr, 2), error_lstm=round(error_lstm, 2), error_arima=round(error_arima, 2))
 
 
 if __name__ == '__main__':

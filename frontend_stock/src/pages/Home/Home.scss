@@ -1,55 +1,132 @@
 .home-image-top {
-    background-image: url('../../images/investing-at-market-high-1.jpg');
+    background-image: url('../../images/img/slider/slider_bg03.jpg');
     background-repeat: no-repeat;
     z-index: 1;
     width: 100%;
-    height: 500px;
+    min-height: 690px;
 
-    .home-first-child {
-        position: absolute;
-        top: 30%;
-        left: 30%;
-        transform: translate(-50%, -50%);
-        z-index: 2;
-        color: #fff;
-        font-size: 24px;
-        font-weight: bold;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
+    .home-section{
+      display: flex;
+      flex-direction: row;
+      .home-mage-text{
+            max-width: 594px;
+            display: flex;
+            height: 590px;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 86px;
+            padding-top: 100px;
+            z-index: 1000;
+        h2{
+            color: #fff;
+            font-size: 32px;
+            font-family: "Muli", sans-serif;
+            text-transform: capitalize;
+            display: block;
+        }
 
-    .home-second-child {
-        z-index: 2;
-        position: absolute;
-        top: 36%;
-        left: 25%;
-        color: #fff;
-        width: 300px;
-        text-align: left;
-        animation: slideInFromLeft 1s forwards;
-        opacity: 0;
+        h1{
+            color: #fff;
+            font-size: 43px;
+            font-weight: 900;
+            margin-bottom: 25px;
+        }
+        p
+        {
+          text-align: left;
+          color: #fff;
+          margin-bottom: 45px;
+          padding-right: 30px;
+        }
+      }
+      .home-image-right{
+        background-image: url('../../images/img/slider/slider_img03.png');
+        background-repeat: no-repeat;
+        width: 100%;
+        padding-right: 700px;
+      }
     }
 }
 
-@keyframes slideInFromLeft {
-    0% {
-        transform: translateX(-100%);
-        opacity: 0;
+.home-choose-us{
+    margin-top: 120px;
+    .home-choose-while{
+        color: #5d58f7;
+        font-size: 18px;
+        display: block;
+        font-family: 'Muli', sans-serif;
+        font-weight: 800;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
     }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
+    h2{
+        font-size: 36px;
+        font-weight: 900;
+        margin-bottom: 15px;
+    }
+    p{
+        color: #a6a9b7;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.714rem;
     }
 }
 
-.home-choose-fc{
-    visibility: visible;
-    animation-delay: 0.2s;
-    animation-name: fadeInUp;
-}
-
-h2{
-    font-weight: 600;
-    font-size: large;
+.home-choose-section{
+    display: flex;
+    flex-direction: row;
+    .home-choose-image{
+        margin-top: 50px;
+        background-image: url('../../images/img/features//choose_img.png');
+        background-repeat: no-repeat;
+        height: 466px;
+        padding-right: 600px;
+    }
+    .home-choose-item{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        .item{
+            display: flex;
+            .item-image-smart{
+                background-image: url('../../images/img/icon//choose_icon01.png');
+                background-repeat: no-repeat;
+                width: 51px;
+                height: 51px;
+            }
+            .item-image-innovation{
+                background-image: url('../../images/img/icon//choose_icon02.png');
+                background-repeat: no-repeat;
+                width: 51px;
+                height: 51px;
+            }
+            .item-image-customize{
+                background-image: url('../../images/img/icon//choose_icon03.png');
+                background-repeat: no-repeat;
+                width: 51px;
+                height: 51px;
+            }
+            .item-image-continuous{
+                background-image: url('../../images/img/icon//choose_icon04.png');
+                background-repeat: no-repeat;
+                width: 51px;
+                height: 51px;
+            }
+            .item-text{
+                width: 500px;
+                text-align: left;
+                padding-left: 20px;
+                h6{
+                    font-size: 20px;
+                    font-weight: 700;
+                    margin-bottom: 3px;
+                }
+                p{
+                    margin-bottom: 0;
+                    color: #677294;
+                    font-size: 15px;
+                }
+            }
+        }
+    }
 }

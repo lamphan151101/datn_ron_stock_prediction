@@ -12,18 +12,15 @@ const Navbar: FC = memo(() => (
       </Link>
     </div>
     <h3>Main Menu</h3>
-    <ul>
-      <li>
-        <NavbarButton url='/dashboard' icon='dashboard' title='Deposit-Withdraw' />
-      </li>
-      <li>
-        <NavbarButton url='/wallet' icon='account_balance_wallet' title='My Wallet' />
+        <ul>
+            <li>
+        <NavbarButton url='/Home' icon='equalizer' title='Home' />
+            </li>
+             <li>
+        <NavbarButton url='/stockprediction' icon='sync' title='Stock Prediciton' />
       </li>
       <li>
         <NavbarButton url='/transactions' icon='sync' title='Transactions' />
-      </li>
-      <li>
-        <NavbarButton url='/trading' icon='paid' title='Trading' />
       </li>
       <li>
         <NavbarButton url='/exchange' icon='account_balance' title='Exchange' />
@@ -31,9 +28,7 @@ const Navbar: FC = memo(() => (
       <li>
         <NavbarButton url='/capital' icon='equalizer' title='Market' />
         </li>
-        <li>
-        <NavbarButton url='/home' icon='equalizer' title='home' />
-      </li>
+
     </ul>
     <h3>Others</h3>
     <ul>

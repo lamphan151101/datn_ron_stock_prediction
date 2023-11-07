@@ -55,22 +55,7 @@ const Login: FC = () => {
       if (res.status === 200) {
           navigate('/DashboardScreen');
         }
-    //   if (formValues.userName && formValues.password) {
-    //       await loginUser({email: formValues.userName, password: formValues.password})
-    //   }
-    //   else {
-    //       toast.error("please fill all fields")
-    //   }
   };
-//   console.log(isLoginSuccess)
-//     useEffect(() => {
-//         if (isLoginSuccess) {
-//             toast.success("User Login Successfully");
-//             dispatch(setUser({name: loginData.email}))
-//             navigate('/MarketScreen');
-//         }
-//     }, [isLoginSuccess])
-//     console.log(loginError, 'loginError')
   return (
     <MainLayout>
       <div className='flex flex-center full-height'>

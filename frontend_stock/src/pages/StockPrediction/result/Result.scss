@@ -1,0 +1,91 @@
+.container-props{
+    .row{
+        .today-stock-data{
+            margin-top: 350px;
+            display: flex;
+            flex-direction: column;
+            width: 800px;
+            height: 250px;
+            background: #fff;
+            border: none;
+            margin-bottom: 30px;
+            -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+            -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+            box-shadow: 0 0 20px rgba(115,105,215,.15);
+            border-radius: 0;
+            padding: 0;
+            .title{
+                background: 0 0;
+                padding: 1.25rem;
+                border-radius: 0;
+                border-color: #ebedf2;
+                h4{
+                    font-family: 'Muli', sans-serif;
+                    font-weight: normal;
+                    color: #282835;
+                    margin-top: 0px;
+                    font-style: normal;
+                    font-weight: 400;
+                    text-transform: normal;
+                }
+            }
+            .value{
+                display: flex;
+                justify-content: space-around;
+                .item{
+                    .title-value{
+                        p{
+                            color: #a6a9b7;
+                            font-weight: 400;
+                            font-size: 1rem;
+                            line-height: 1.714rem;
+                        }
+                        h3{
+                            font-family: 'Muli', sans-serif;
+                            font-weight: normal;
+                            color: #282835;
+                            margin-top: 0px;
+                            font-style: normal;
+                            font-weight: 400;
+                            text-transform: normal;
+                        }
+                    }
+                }
+            }
+        }
+        .table-prediction{
+            display: flex;
+            flex-direction: row;
+            .table-prediction-image{
+                background: #fff;
+                border: none;
+                margin-bottom: 30px;
+                -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+                -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+                box-shadow: 0 0 20px rgba(115,105,215,.15);
+                border-radius: 0;
+                padding: 0;
+                .table-prediciton-tile{
+                    background: 0 0;
+                    padding: 1.25rem;
+                    border-radius: 0;
+                    border-color: #ebedf2;
+                    h4{
+                        font-family: 'Muli', sans-serif;
+                        font-weight: normal;
+                        color: #282835;
+                        margin-top: 0px;
+                        font-style: normal;
+                        font-weight: 400;
+                        text-transform: normal;
+                    }
+                }
+                .image-trend{
+                    background-image: url('../../../../../static/Trends.png');
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+            }
+        }
+    }
+}

@@ -15,6 +15,8 @@ import MarketScreen from './pages/Market/MarketScreen';
 import CapitalScreen from './pages/Capital/CapitalScreen';
 import TransactionsScreen from './pages/Transactions/TransactionsScreen';
 import Home from './pages/Home/Home';
+import StockPrediciton from './pages/StockPrediction/stockPrediction';
+
 
 function App() {
   return (
@@ -32,8 +34,9 @@ function App() {
           <Route path="/DashboardScreen" element={<DashboardScreen />} />
           <Route path="/MarketScreen" element={<MarketScreen />} />
           <Route path="/CapitalScreen" element={<CapitalScreen />} />
-          <Route path="/TransactionsScreen" element={<TransactionsScreen />} />
-           <Route path="/home" element={<Home />} />
+          <Route path="/transactions" element={<TransactionsScreen />} />
+            <Route path="/Home" element={<Home />} />
+            <Route path="/stockprediction" element={<StockPrediciton />} />
         </Routes>
       </BrowserRouter>
     </div>
