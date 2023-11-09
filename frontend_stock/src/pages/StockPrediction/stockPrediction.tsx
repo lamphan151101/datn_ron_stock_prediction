@@ -6,6 +6,7 @@ import FormInput from "../../components/FormInput/FormInput";
 import FormButton from "../../components/FormInput/FormButton";
 import httpClient from "../../httpClient";
 import Result from "./result/result";
+import ChartComponent from "./lineChart/lineChart";
 export {};
 
     interface FormValues {
@@ -43,7 +44,20 @@ const StockPrediciton = () => {
       [name]: value,
     });
     };
+    interface DataItem {
+    day: string;
+    value: number;
+    }
 
+    const data2: DataItem[] = [
+    { day: 'Mon', value: 820 },
+    { day: 'Tue', value: 932 },
+    { day: 'Wed', value: 901 },
+    { day: 'Thu', value: 934 },
+    { day: 'Fri', value: 1290 },
+    { day: 'Sat', value: 1330 },
+    { day: 'Sun', value: 1320 },
+    ];
 	return (
 		<SiteLayout>
 			<Header icon="sort" title="Deposit and Withdraw" />

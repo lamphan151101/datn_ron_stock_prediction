@@ -1,4 +1,5 @@
 
+import ChartComponent from "../lineChart/lineChart";
 import TableData from "../table/table";
 import "./Result.scss";
 export { };
@@ -8,6 +9,21 @@ export { };
 const Result = (props: any) => {
     console.log(props, 'props')
     const { res } = props;
+    interface DataItem {
+    day: string;
+    value: number;
+    }
+
+    const data: DataItem[] = [
+    { day: 'Mon', value: 820 },
+    { day: 'Tue', value: 932 },
+    { day: 'Wed', value: 901 },
+    { day: 'Thu', value: 934 },
+    { day: 'Fri', value: 1290 },
+    { day: 'Sat', value: 1330 },
+    { day: 'Sun', value: 1320 },
+    ];
+
 	return (
             <div className="container-props">
                 <div className="row">
@@ -43,13 +59,14 @@ const Result = (props: any) => {
                                 <div className="value-number"><h3>{res ? res.data.vol : ''}</h3></div>
                             </div>
                         </div>
-                    </div>
+                </div>
+
                     <div className="table-prediction">
                         <div className="table-prediction-image">
                             <div className="table-prediciton-tile">
                                 <h4>Recent Trend In {props.symbol} Stock Prices</h4>
                             </div>
-                            <div className="image-trend"></div>
+                            <ChartComponent data={res ? res.data.quantityDate : []} />
                         </div>
                         <div className="table-prediction-image">
                             <div className="table-prediciton-tile">
@@ -131,7 +148,7 @@ const Result = (props: any) => {
                     </div>
                     <div className="left-side">
                         <div className="predic">
-                            
+
                         </div>
                         <div className="recommence"></div>
                     </div>

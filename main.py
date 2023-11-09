@@ -30,6 +30,7 @@ from keras.layers import LSTM, Dropout, Dense
 from sklearn.preprocessing import MinMaxScaler
 import math
 import matplotlib.pyplot as plt
+import requests
 plt.style.use('ggplot')
 
 nltk.download('punkt')
@@ -154,6 +155,26 @@ def contact():
     return render_template('contact.html')
 
 
+@app.route('/allStock', methods=['GET'])
+def getAllStock():
+    url = "https://twelve-data1.p.rapidapi.com/stocks"
+    querystring = {"exchange": "NASDAQ", "format": "json"}
+
+    headers = {
+        "X-RapidAPI-Key": "b5d4927c0emsh1f0acff2027d55cp1d7c9ajsn4bb2a0645707",
+        "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        data = response.json()
+        return jsonify(data)  # Convert the data to a JSON response
+    else:
+        # Return an error response with status code 500
+        return jsonify({"error": "Failed to fetch data from the external API"}), 500
+
+
 @app.route('/contact-form', methods=['POST'])
 def contact_form():
     if request.method == 'POST':
@@ -173,6 +194,31 @@ def contact_form():
         mail.send(team_msg)
 
         return render_template('message-sent.html')
+
+
+@app.route('/stockDataDeatil', methods=['POST'])
+def stocDetail():
+    symbol = request.json['symbol']
+    interval = request.json['interval']
+
+    url = "https://twelve-data1.p.rapidapi.com/time_series"
+
+    querystring = {"symbol": {symbol}, "interval": {interval},
+                   "outputsize": "30", "format": "json"}
+
+    headers = {
+        "X-RapidAPI-Key": "b5d4927c0emsh1f0acff2027d55cp1d7c9ajsn4bb2a0645707",
+        "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        data = response.json()
+        return jsonify(data)  # Convert the data to a JSON response
+    else:
+        # Return an error response with status code 500
+        return jsonify({"error": "Failed to fetch data from the external API"}), 500
 
 
 @app.route("/result", methods=['POST'])
@@ -267,7 +313,7 @@ def result():
             # rmse calculation
             error_arima = math.sqrt(mean_squared_error(test, predictions))
             print("ARIMA RMSE:", error_arima)
-            return arima_pred, error_arima
+            return arima_pred, error_arima, Quantity_date
 
     # ************* LSTM SECTION **********************
 
@@ -533,7 +579,7 @@ def result():
         df2 = pd.concat([df2, df], axis=1)
         df = df2
 
-        arima_pred, error_arima = ARIMA_ALGO(df)
+        arima_pred, error_arima, Quantity_date = ARIMA_ALGO(df)
         lstm_pred, error_lstm = LSTM_ALGO(df)
         df, lr_pred, forecast_set, mean, error_lr = LIN_REG_ALGO(df)
 
@@ -556,25 +602,29 @@ def result():
         error_lstm = float(round(error_lstm, 2))
         error_arima = float(round(error_arima, 2))
         forecast_set = forecast_set.tolist()
+        lr_pred = float(round(lr_pred, 2))
+        quantity_date_objects = Quantity_date.reset_index().to_dict(orient='records')
         return jsonify({
             "quote": quote,
             "arima_pred": arima_pred,
             "lstm_pred": lstm_pred,
+            "lr_pred": lr_pred,
             "open_s": today_stock['Open'].to_string(index=False),
-             "close_s":today_stock['Close'].to_string(index=False),
-             "adj_close":today_stock['Adj Close'].to_string(index=False),
-             "news_list":news_list,
-             "overall_sentiment":overall_sentiment,
-             "idea":idea,
-             "decision":decision,
-             "high_s":today_stock['High'].to_string(
-                                   index=False),
-            "low_s":today_stock['Low'].to_string(index=False),
-            "vol":today_stock['Volume'].to_string(index=False),
-            "forecast_set":forecast_set,
-            "error_lr":error_lr,
-            "error_lstm":error_lstm,
-            "error_arima":error_arima
+            "close_s": today_stock['Close'].to_string(index=False),
+            "adj_close": today_stock['Adj Close'].to_string(index=False),
+            "news_list": news_list,
+            "overall_sentiment": overall_sentiment,
+            "idea": idea,
+            "decision": decision,
+            "high_s": today_stock['High'].to_string(
+                index=False),
+            "low_s": today_stock['Low'].to_string(index=False),
+            "vol": today_stock['Volume'].to_string(index=False),
+            "forecast_set": forecast_set,
+            "error_lr": error_lr,
+            "error_lstm": error_lstm,
+            "error_arima": error_arima,
+            "quantityDate": quantity_date_objects
 
         })
         # return render_template('result.html', quote=quote, arima_pred=round(arima_pred, 2), lstm_pred=round(lstm_pred, 2),

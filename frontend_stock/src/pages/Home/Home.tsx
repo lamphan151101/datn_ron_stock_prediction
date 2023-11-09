@@ -1,5 +1,6 @@
 import Header from "../../components/Header/Header";
 import SiteLayout from "../../layouts/SiteLayout";
+import TableData from "./component/tableData/table";
 import "./Home.scss";
 export {};
 
@@ -69,7 +70,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-			<div className="home-best-feature"></div>
+            <div className="home-best-feature"></div>
+            <TableData />
 		</SiteLayout>
 	);
 };
