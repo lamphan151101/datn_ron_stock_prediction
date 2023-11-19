@@ -1,114 +1,191 @@
-import React, { useState, useEffect } from 'react';
-import SiteLayout from '../../layouts/SiteLayout';
-import Header from '../../components/Header/Header';
-import TopBar from '../../components/Tables/TopBar/TopBar';
-import TransactionRow from '../../components/Tables/Transactions/TransactionRow';
+import React, { useEffect, useMemo, useState } from "react";
+import { Space, Table, Tag, Input, Tooltip, Alert, notification } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
+import httpClient from "../../httpClient";
+import SiteLayout from "../../layouts/SiteLayout";
+import Header from "../../components/Header/Header";
+import Loader from "../../components/Common/loader/loader";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
-interface TransactionData {
-  id: number;
-  type: number;
-  transaction: string;
-  date: string;
-  from: string;
-  to: string;
-  toPicture: string;
-  coin: string;
-  icon: string;
-  amount: string;
-  status: number;
+interface DataType {
+	symbol: string;
+	country: string;
+	currency: string;
+	mic_code: string;
+	name: string;
+	type: string;
 }
 
-const TransactionsScreen: React.FC = () => {
-  const [data, setData] = useState<TransactionData[]>([]);
-  const [keyword, setKeyword] = useState<string>('');
+const Transactions: React.FC = () => {
+	const navigate = useNavigate();
+	const [data, setData] = useState<any>();
+	const [searchText, setSearchText] = useState<string>("");
+	const [isLoader, setIsLoader] = useState<boolean>(false);
+	const Context = React.createContext({ name: "Default" });
+	const contextValue = useMemo(() => ({ name: "Ant Design" }), []);
 
-  useEffect(() => {
-    const dataArray: TransactionData[] = [
-      {
-        id: 1,
-        type: 2,
-        transaction: '12415346563475',
-        date: '2/5/2020 06:24:45',
-        from: 'Tarik',
-        to: 'Cenk',
-        toPicture: 'https://pbs.twimg.com/profile_images/1265581417364369408/b7CxjEfi_400x400.jpg',
-        coin: 'Bitcoin',
-        icon: 'https://icons-for-free.com/iconfiles/png/512/btc+coin+crypto+icon-1320162856490699468.png',
-        amount: '5.553',
-        status: 1,
-      },
-      {
-        id: 2,
-        type: 2,
-        transaction: '12453465987451',
-        date: '3/5/2020 18:35:12',
-        from: 'Tarik',
-        to: 'Cenk',
-        toPicture: 'https://pbs.twimg.com/profile_images/1265581417364369408/b7CxjEfi_400x400.jpg',
-        coin: 'Ethereum',
-        icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Ethereum-ETH-icon.png',
-        amount: '3.000',
-        status: 2,
-      },
-      {
-        id: 3,
-        type: 1,
-        transaction: '24153459987415',
-        date: '4/5/2020 13:42:01',
-        from: 'Cenk',
-        to: 'Tarik',
-        toPicture: '',
-        coin: 'Tether',
-        icon: 'https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/1024/Tether-USDT-icon.png',
-        amount: '158',
-        status: 3,
-      },
-    ];
+	useEffect(() => {
+		initData();
+	}, []);
 
-    setData(dataArray);
-  }, []);
+	const onClick = (symbol: string) => {
+		navigate(`/datadetail/${symbol}`);
+	};
 
-  const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setKeyword(value);
-  };
+	const handleSearch = (value: string) => {
+		setSearchText(value);
+	};
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+	const columns: ColumnsType<DataType> = [
+		{
+			title: "Symbol",
+			dataIndex: "symbol",
+			key: "symbol",
+			render: (_, render) => {
+				return (
+					<div
+						style={{ cursor: "pointer" }}
+						onClick={() => onClick(render?.symbol)}
+					>
+						<a>{render?.symbol}</a>
+					</div>
+				);
+			},
+		},
+		{
+			title: "Name",
+			dataIndex: "name",
+			key: "name",
+			render: (_, render) => {
+				return <div>{render?.name}</div>;
+			},
+		},
+		{
+			title: "Currency",
+			dataIndex: "currency",
+			key: "currency",
+			render: (_, render) => {
+				return <div>{render?.currency}</div>;
+			},
+		},
+		{
+			title: "Country",
+			key: "country",
+			dataIndex: "country",
+			render: (_, render) => {
+				return <div>{render?.country}</div>;
+			},
+		},
+		{
+			title: "Action",
+			key: "action",
+			dataIndex: "action",
+			render: (_, render) => {
+				return (
+					<div
+						style={{
+							cursor: "pointer",
+							marginLeft: 10,
+						}}
+					>
+						<Tooltip title="Add to Watch List" color="red" key="red">
+							<PlusCircleOutlined
+								onClick={() => addStockToWatchList(render.symbol)}
+							/>
+						</Tooltip>
+					</div>
+				);
+			},
+		},
+	];
 
-  return (
-    <SiteLayout>
-      <Header icon='sort' title='Transactions' />
-      <TopBar
-        searchValue={keyword}
-        searchOnChange={handleSearchValue}
-        searchSubmit={handleSearchSubmit}
-      />
+	const filteredData = data?.filter((item: DataType) =>
+		item.symbol.toLowerCase().includes(searchText.toLowerCase())
+	);
 
-      {data && data.length > 0 && (
-        <table className='data-table'>
-          <thead>
-            <tr>
-              <th className='left'>&nbsp;</th>
-              <th className='left responsive-hide'>Transaction</th>
-              <th className='left responsive-hide'>Date</th>
-              <th className='left'>From</th>
-              <th className='left'>To</th>
-              <th className='left'>Coin</th>
-              <th className='center'>Amount</th>
-              <th className='center'>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item) => (
-              <TransactionRow key={item.id.toString()} item={item} />
-            ))}
-          </tbody>
-        </table>
-      )}
-    </SiteLayout>
-  );
+	const initData = async () => {
+		try {
+			setIsLoader(true);
+			const res = await httpClient.get("//localhost:5000/allStock");
+			if (true) {
+				console.log(res.data.data, "res");
+				setData(res.data.data);
+				setIsLoader(false);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+	const addStockToWatchList = async (symbol: string) => {
+		try {
+			setIsLoader(true);
+			const res = await httpClient.post("//localhost:5000/add_watch_list", {
+				symbol: symbol,
+			});
+			console.log("Response:", res); // Thêm dòng này
+			if (res.data.status === "200") {
+				openNotification();
+				console.log("Status 200 reached!"); // Thêm dòng này
+				setIsLoader(false);
+			}
+			if (res.data.status === "401") {
+				openNotificationFail();
+				console.log("Status 200 reached!");
+				setIsLoader(false);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const openNotification = () => {
+		notification.success({
+			message: `Add Stock Successfully`,
+			duration: 2,
+		});
+	};
+	const openNotificationFail = () => {
+		notification.error({
+			message: `Add Stock Faild`,
+			description: (
+				<Context.Consumer>
+					{() => `The Symbol had been already exist`}
+				</Context.Consumer>
+			),
+			duration: 2,
+		});
+	};
+
+	return (
+		<Context.Provider value={contextValue}>
+			<SiteLayout>
+				<Header icon="sort" title="Stock Market" />
+				<Input
+					placeholder="Search by Symbol"
+					onChange={(e) => handleSearch(e.target.value)}
+					style={{ marginBottom: 16, width: 200, height: 40, display: "flex" }}
+				/>
+				{isLoader ? (
+					<div
+						style={{ width: "100%", display: "flex", justifyContent: "center" }}
+					>
+						<Loader />
+					</div>
+				) : (
+					<Table
+						style={{
+							border: "1px solid #d7d7d7",
+							borderRadius: "10px",
+							padding: "10px",
+						}}
+						columns={columns}
+						dataSource={filteredData}
+					/>
+				)}
+			</SiteLayout>
+		</Context.Provider>
+	);
 };
 
-export default TransactionsScreen;
+export default Transactions;

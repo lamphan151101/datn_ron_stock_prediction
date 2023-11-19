@@ -1,129 +1,131 @@
-import React, { FC, ReactNode, useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import MainLayout from '../../layouts/MainLayout';
-import Box from '../../components/Common/Box';
-import FormInput from '../../components/FormInput/FormInput';
-import FormButton from '../../components/FormInput/FormButton';
-import httpClient from '../../httpClient';
-import {useLoginUserMutation} from "../../services/authApi"
-import { toast } from 'react-toastify';
-import { useAppDispatch } from '../../app/hooks';
-import { setUser } from '../../features/authSlice';
+import React, {
+	FC,
+	ReactNode,
+	useState,
+	ChangeEvent,
+	FormEvent,
+	useEffect,
+} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import MainLayout from "../../layouts/MainLayout";
+import Box from "../../components/Common/Box";
+import httpClient from "../../httpClient";
+import Loader from "../../components/Common/loader/loader";
+import "./Login.scss";
 
 interface FormValues {
-  userName: string;
-  password: string;
+	userName: string;
+	password: string;
 }
 
 const Login: FC = () => {
-  const navigate = useNavigate();
-//   const dispatch = useAppDispatch();
-    // const currentUser = useSelector((state: any) => state.auth.login.currentUser);
-    // const [
-    //     loginUser,
-    //     {
-    //         data: loginData,
-    //         isSuccess: isLoginSuccess,
-    //         isError: isLoginError,
-    //         error: loginError
-    //     },
-    // ] = useLoginUserMutation();
+	const navigate = useNavigate();
+	const [isLoader, setIsLoader] = useState<boolean>(false);
 
-  const [formValues, setFormValues] = useState<FormValues>({
-    userName: '',
-    password: '',
-  });
+	const [formValues, setFormValues] = useState<FormValues>({
+		userName: "",
+		password: "",
+	});
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		console.log(e, "e");
+		const { name, value } = e.target;
 
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
+		setFormValues({
+			...formValues,
+			[name]: value,
+		});
+	};
 
-  const handleSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-        console.log(formValues, 'aaaa')
-      const res = await httpClient.post("//localhost:5000/login", {
-          email: formValues.userName,
-          password: formValues.password
-      })
-      console.log(res, "res")
-      if (res.status === 200) {
-          navigate('/DashboardScreen');
-        }
-  };
-  return (
-    <MainLayout>
-      <div className='flex flex-center full-height'>
-        <div className='login no-select'>
-          <Box>
-            <div className='box-vertical-padding box-horizontal-padding'>
-              <div>
-                <div className='form-logo center'>
-                  <img src='/images/logo.png' alt='Crypto Exchange' draggable='false' />
-                </div>
-                <h1 className='form-title center'>Member login</h1>
-                <p className='form-desc center'>
-                  Please in your browser's address bar.
-                  <strong>https://pro.cryptoexchange.com</strong> Make sure you have typed it.
-                </p>
-                <form className='form' onSubmit={handleSubmit} noValidate>
-                  <div className='form-elements'>
-                    <div className='form-line'>
-                      <div className='full-width'>
-                        <label htmlFor='userName'>Your User Name</label>
-                        <FormInput
-                          type='text'
-                          name='userName'
-                          value={formValues.userName}
-                          placeholder='Enter your userName'
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className='form-line'>
-                      <div className='full-width'>
-                        <label htmlFor='password'>Your password</label>
-                        <FormInput
-                          type='password'
-                          name='password'
-                          value={formValues.password}
-                          placeholder='Enter your password'
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className='form-line'>
-                      <div className='full-width right'>
-                        <Link to='/members/forgot-password'>I forgot my password</Link>
-                      </div>
-                    </div>
-                    <div className='form-line'>
-                      <div className='buttons'>
-                        <FormButton type='submit' text='Log in' onClick={handleSubmit} />
-                      </div>
-                    </div>
-                    <div className='form-line'>
-                      <div className='center'>
-                        <p>
-                          If you don't have an account <Link to='/Register'>New account</Link>{' '}
-                          Create.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </Box>
-        </div>
-      </div>
-    </MainLayout>
-  );
+	const handleSubmit = async (e: FormEvent) => {
+		e.preventDefault();
+		setIsLoader(true);
+		const res = await httpClient.post("//localhost:5000/login", {
+			email: formValues.userName,
+			password: formValues.password,
+		});
+		console.log(res, "res");
+		if (res.status === 200) {
+			setIsLoader(false);
+			navigate("/home");
+		}
+	};
+	return (
+		<>
+			<MainLayout>
+				{isLoader ? (
+					<div className="flex flex-center full-height">
+						<Loader />
+					</div>
+				) : (
+					<div className="flex flex-center full-height">
+						<div className="login no-select">
+							<Box>
+								<div className="box-vertical-padding box-horizontal-padding">
+									<form className="form" onSubmit={handleSubmit} noValidate>
+										<p id="heading">Login</p>
+										<div className="field">
+											<svg
+												className="input-icon"
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="currentColor"
+												viewBox="0 0 16 16"
+											>
+												<path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
+											</svg>
+											<input
+												autoComplete="off"
+												name="userName"
+												placeholder="Username"
+												className="input-field"
+												type="text"
+												onChange={handleChange}
+											/>
+										</div>
+										<div className="field">
+											<svg
+												className="input-icon"
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="currentColor"
+												viewBox="0 0 16 16"
+											>
+												<path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+											</svg>
+											<input
+												placeholder="Password"
+												className="input-field"
+												type="password"
+												name="password"
+												onChange={handleChange}
+											/>
+										</div>
+										<div className="btn">
+											<button className="button1">
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											</button>
+											<button
+												className="button2"
+												onClick={() => {
+													return navigate("/Register");
+												}}
+											>
+												Sign Up
+											</button>
+										</div>
+										<button className="button3">Link</button>
+									</form>
+								</div>
+							</Box>
+						</div>
+					</div>
+				)}
+			</MainLayout>
+		</>
+	);
 };
 
 export default Login;

@@ -22,8 +22,8 @@ const TableData: React.FC = () => {
     useEffect(() => {
         initData();
     }, [])
-    const onClick = () => {
-        <App />
+    const onClick = (symbol: string) => {
+        navigate(`/datadetail/${symbol}`);
     }
     const columns: ColumnsType<DataType> = [
   {
@@ -32,7 +32,7 @@ const TableData: React.FC = () => {
     key: 'symbol',
     render: ((_, render) => {
         return (
-            <div onClick={() => onClick()}>{render?.symbol }</div>
+            <div style={{cursor: 'pointer'}} onClick={() => onClick(render?.symbol)}>{render?.symbol }</div>
         )
     }),
   },

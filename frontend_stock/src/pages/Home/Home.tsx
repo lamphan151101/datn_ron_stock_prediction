@@ -7,7 +7,7 @@ export {};
 const Home = () => {
 	return (
 		<SiteLayout>
-			<Header icon="sort" title="Deposit and Withdraw" />
+			<Header icon="sort" title="Home" />
 			<div className="home-image-top">
 				<div className="home-section">
 					<div className="home-mage-text">

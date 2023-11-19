@@ -1,88 +1,47 @@
-import React from 'react';
-import { Space, Table, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import React, { useEffect, useState } from "react";
+import httpClient from "../../../../httpClient";
+import CandleStick from "../../../../components/Widgets/CandleStick/CandleStick";
+import { useParams } from "react-router-dom";
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
+const DataDetail: React.FC = () => {
+	const [data, setData] = useState<any>([]);
+  const { symbol } = useParams<{ symbol: string }>();
+  const [isLoader, setIsLoader] = useState<boolean>(false);
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
+	useEffect(() => {
+		initData();
+	}, []);
+	const initData = async () => {
+    try {
+      setIsLoader(true);
+			const res = await httpClient.post("//localhost:5000/stockDataDetail", {
+				symbol: symbol,
+				interval: "1day",
+				outputsize: "300",
+			});
+			if (res) {
+				const rawData = res.data.values.map((item: any) => ({
+					x: new Date(item.datetime).getTime(),
+					y: [
+						parseFloat(item.open),
+						parseFloat(item.high),
+						parseFloat(item.low),
+						parseFloat(item.close),
+					],
+				}));
+        setData(rawData);
+        setIsLoader(false);
+				console.log(rawData, "raw");
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+	return (
+		<>
+			<CandleStick data={data} symbol={symbol} />
+		</>
+	);
+};
 
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
-
-const App: React.FC = () => <Table columns={columns} dataSource={data} />;
-
-export default App;
+export default DataDetail;

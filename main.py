@@ -1,11 +1,12 @@
 
 
 # **************** IMPORT PACKAGES ********************
+from flask_apscheduler import APScheduler
 from flask_cors import CORS, cross_origin
 from flask_session import Session
 from flask_bcrypt import Bcrypt
 from config import ApplicationConfig
-from model import db, User
+from model import db, User, WatchList, StockValue, Stock
 import random
 import os
 import warnings
@@ -43,7 +44,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 # ************ FLASK *****************
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
-
+sched = APScheduler()
 bcrypt = Bcrypt(app)
 cors = CORS(app, supports_credentials=True)
 server_session = Session(app)
@@ -62,7 +63,7 @@ def register_user():
     if user_exists:
         return jsonify({"error": "User already exists"}), 409
 
-    hashed_password = bcrypt.generate_password_hash(password)
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
     new_user = User(email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
@@ -94,6 +95,68 @@ def login_user():
     })
 
 
+@app.route("/add_watch_list", methods=["POST"])
+def add_watchlist():
+    symbol = request.json["symbol"]
+
+    exist_watchlist = WatchList.query.filter_by(symbol=symbol).first()
+    if exist_watchlist:
+        return jsonify({"error": "the symbol had already been existed", 'status': '401'})
+
+    if exist_watchlist is None:
+        new_watchList = WatchList(
+            symbol=symbol
+        )
+        db.session.add(new_watchList)
+        db.session.commit()  # Commit phiên làm việc để lấy ID
+        exist_watchlist = new_watchList
+
+    return jsonify({'message': 'New Watch Stock added or updated successfully', 'status': '200'})
+
+
+@app.route("/get_all_watch_list", methods=["GET"])
+def getAllWatchList():
+    symbols = WatchList.query.all()
+    data = []
+    for symbol in symbols:
+        data.append(symbol.symbol)
+    return data
+
+
+@app.route("/get_detail_stock_watch_list", methods=["POST"])
+def getDetailStockFromWatchList():
+    symbol = request.json["symbol"]
+
+    stock_data = Stock.query.filter_by(symbol=symbol).first()
+    if stock_data:
+        stock_values = [
+            {
+                'datetime': value.datetime,
+                'open': value.open,
+                'high': value.high,
+                'low': value.low,
+                'close': value.close,
+                'volume': value.volume,
+            } for value in stock_data.values
+        ]
+
+        formatted_data = {
+            'stock_id': stock_data.id,
+            'symbol': stock_data.symbol,
+            'interval': stock_data.interval,
+            'currency': stock_data.currency,
+            'exchange_timezone': stock_data.exchange_timezone,
+            'exchange': stock_data.exchange,
+            'mic_code': stock_data.mic_code,
+            'type': stock_data.type,
+            'values': stock_values,
+        }
+
+        return jsonify({'data': formatted_data})
+    else:
+        return jsonify({'error': 'Symbol not found'})
+
+
 @app.route("/@me")
 def get_current_user():
     user_id = session.get("user_id")
@@ -108,14 +171,6 @@ def get_current_user():
     })
 
 
-# Configure Flask-Mail settings
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'itlearnix@gmail.com'
-app.config['MAIL_PASSWORD'] = 'veyqttrtaoahxsga'
-app.config['MAIL_DEFAULT_SENDER'] = 'itlearnix@gmail.com'
-
 # Configure the OAuth instances
 mail = Mail(app)
 
@@ -128,31 +183,6 @@ def add_header(response):
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Expires'] = '0'
     return response
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/stock-predictions')
-def stock_predictions():
-    return render_template('stock-predictions.html')
-
-
-@app.route('/coinvert')
-def coinvert():
-    return render_template('coinvert.html')
-
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
 
 
 @app.route('/allStock', methods=['GET'])
@@ -196,15 +226,16 @@ def contact_form():
         return render_template('message-sent.html')
 
 
-@app.route('/stockDataDeatil', methods=['POST'])
+@app.route('/stockDataDetail', methods=['POST'])
 def stocDetail():
     symbol = request.json['symbol']
     interval = request.json['interval']
+    outputsize = request.json['outputsize']
 
     url = "https://twelve-data1.p.rapidapi.com/time_series"
 
     querystring = {"symbol": {symbol}, "interval": {interval},
-                   "outputsize": "30", "format": "json"}
+                   "outputsize": {outputsize}, "format": "json"}
 
     headers = {
         "X-RapidAPI-Key": "b5d4927c0emsh1f0acff2027d55cp1d7c9ajsn4bb2a0645707",
@@ -627,14 +658,124 @@ def result():
             "quantityDate": quantity_date_objects
 
         })
-        # return render_template('result.html', quote=quote, arima_pred=round(arima_pred, 2), lstm_pred=round(lstm_pred, 2),
-        #                        lr_pred=round(lr_pred, 2), open_s=today_stock['Open'].to_string(index=False),
-        #                        close_s=today_stock['Close'].to_string(index=False), adj_close=today_stock['Adj Close'].to_string(index=False),
-        #                        news_list=news_list, overall_sentiment=overall_sentiment, idea=idea, decision=decision, high_s=today_stock['High'].to_string(
-        #                            index=False),
-        #                        low_s=today_stock['Low'].to_string(index=False), vol=today_stock['Volume'].to_string(index=False),
-        #                        forecast_set=forecast_set, error_lr=round(error_lr, 2), error_lstm=round(error_lstm, 2), error_arima=round(error_arima, 2))
+
+
+# @app.route('/api/add_stock', methods=['POST'])
+def update_data_stock():
+    # symbol = request.json['symbol']
+    with app.app_context():
+        print("-------------------------------------")
+        print("start to update data stock in 10s")
+        print("-------------------------------------")
+        symbols = WatchList.query.all()
+        for watch_list_symbols in symbols:
+            symbol = watch_list_symbols.symbol
+            # Kiểm tra xem stock với symbol đã tồn tại hay chưa
+            existing_stock = Stock.query.filter_by(symbol=symbol).first()
+
+            if existing_stock:
+                # Nếu đã tồn tại, xóa tất cả các giá trị hiện tại của nó
+                StockValue.query.filter_by(stock_id=existing_stock.id).delete()
+
+            url = "https://twelve-data1.p.rapidapi.com/time_series"
+
+            querystring = {"symbol": {symbol}, "interval": "1day",
+                           "outputsize": "300", "format": "json"}
+
+            headers = {
+                "X-RapidAPI-Key": "b5d4927c0emsh1f0acff2027d55cp1d7c9ajsn4bb2a0645707",
+                "X-RapidAPI-Host": "twelve-data1.p.rapidapi.com"
+            }
+
+            response = requests.get(url, headers=headers, params=querystring)
+
+            if response.status_code != 200:
+                return jsonify({'error': 'Failed to retrieve data from external API'}), 500
+
+            data = response.json()
+
+            if existing_stock:
+                # Cập nhật thông tin của stock đã tồn tại
+                existing_stock.interval = data['meta']['interval']
+                existing_stock.currency = data['meta']['currency']
+                existing_stock.exchange_timezone = data['meta']['exchange_timezone']
+                existing_stock.exchange = data['meta']['exchange']
+                existing_stock.mic_code = data['meta']['mic_code']
+                existing_stock.type = data['meta']['type']
+            else:
+                # Nếu chưa tồn tại, thêm stock mới vào cơ sở dữ liệu
+                new_stock = Stock(
+                    symbol=data['meta']['symbol'],
+                    interval=data['meta']['interval'],
+                    currency=data['meta']['currency'],
+                    exchange_timezone=data['meta']['exchange_timezone'],
+                    exchange=data['meta']['exchange'],
+                    mic_code=data['meta']['mic_code'],
+                    type=data['meta']['type']
+                )
+                db.session.add(new_stock)
+                db.session.commit()  # Commit phiên làm việc để lấy ID
+                existing_stock = new_stock  # Để sử dụng cho việc thêm giá trị mới
+
+            for value in data['values']:
+                new_value = StockValue(
+                    stock_id=existing_stock.id,
+                    datetime=value['datetime'],
+                    open=float(value['open']),
+                    high=float(value['high']),
+                    low=float(value['low']),
+                    close=float(value['close']),
+                    volume=int(value['volume'])
+                )
+                db.session.add(new_value)
+
+            db.session.commit()
+
+        print("-------------------------------------")
+        print("End")
+        print("-------------------------------------")
+
+        return jsonify({'message': 'Stock added or updated successfully'})
+
+
+@app.route('/get_stock_detail_from_database', methods=['POST'])
+def get_stock_detail_from_database():
+    symbol = request.json["symbol"]
+
+    stock_info = Stock.query.filter_by(symbol=symbol).first()
+    if not stock_info:
+        return jsonify({'error': 'Không tìm thấy mã cổ phiếu'}), 404
+
+    # Tìm kiếm các giá trị của cổ phiếu dựa trên ID
+    stock_values = StockValue.query.filter_by(stock_id=stock_info.id).all()
+
+    # Chuyển đổi kết quả thành định dạng dễ đọc hoặc trả về JSON
+    result = {
+        'symbol': stock_info.symbol,
+        'interval': stock_info.interval,
+        'currency': stock_info.currency,
+        'exchange_timezone': stock_info.exchange_timezone,
+        'exchange': stock_info.exchange,
+        'mic_code': stock_info.mic_code,
+        'type': stock_info.type,
+        'values': []
+    }
+
+    for value in stock_values:
+        result['values'].append({
+            'datetime': value.datetime,
+            'open': value.open,
+            'high': value.high,
+            'low': value.low,
+            'close': value.close,
+            'volume': value.volume
+        })
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':
+    sched.add_job(id='update_data_stock', func=update_data_stock,
+                  trigger='interval', hours=24)
+    sched.start()
     app.run()

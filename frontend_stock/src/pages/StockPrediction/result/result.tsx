@@ -14,16 +14,6 @@ const Result = (props: any) => {
     value: number;
     }
 
-    const data: DataItem[] = [
-    { day: 'Mon', value: 820 },
-    { day: 'Tue', value: 932 },
-    { day: 'Wed', value: 901 },
-    { day: 'Thu', value: 934 },
-    { day: 'Fri', value: 1290 },
-    { day: 'Sat', value: 1330 },
-    { day: 'Sun', value: 1320 },
-    ];
-
 	return (
             <div className="container-props">
                 <div className="row">
