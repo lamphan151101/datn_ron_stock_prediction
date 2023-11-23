@@ -17,8 +17,8 @@ from sklearn.linear_model import LinearRegression
 import re
 import yfinance as yf
 import datetime as dt
-from datetime import datetime
-from flask import Flask, jsonify, render_template, request, flash, redirect, url_for, session
+from datetime import datetime, timedelta
+from flask import Flask, jsonify, render_template, request, flash, redirect, url_for, session, make_response
 from flask_mail import Mail, Message
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
@@ -32,6 +32,11 @@ from sklearn.preprocessing import MinMaxScaler
 import math
 import matplotlib.pyplot as plt
 import requests
+import jwt
+from pmdarima import auto_arima
+from statsmodels.tools.sm_exceptions import ConvergenceWarning
+from functools import wraps
+
 plt.style.use('ggplot')
 
 nltk.download('punkt')
@@ -63,7 +68,7 @@ def register_user():
     if user_exists:
         return jsonify({"error": "User already exists"}), 409
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    hashed_password = bcrypt.generate_password_hash(password)
     new_user = User(email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
@@ -72,6 +77,40 @@ def register_user():
         "id": new_user.id,
         "email": new_user.email
     })
+
+
+def token_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        token = request.args.get('token')
+        print(f"Received token: {token}")
+        print("secret key in jwt: ")
+        print(app.config['SECRET_KEY'])
+
+        if token is None:
+            return jsonify({"error": "Token is missing"}), 401
+
+        try:
+            print("start: ")
+            print(token)
+            data = jwt.decode(
+                token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            print(data)
+            print("secret key in jwt: ")
+            print(app.config['SECRET_KEY'])
+            # current_user = User.query.filter_by(email=data['user']).first()
+        except:
+            return jsonify({'error'}), 403
+
+        return fn(*args, **kwargs)
+
+    return wrapper
+
+
+@app.route("/protec")
+@token_required
+def protec():
+    return jsonify({"mess": "protec success"})
 
 
 @app.route("/login", methods=["POST"])
@@ -87,31 +126,42 @@ def login_user():
     if not bcrypt.check_password_hash(user.password, password):
         return jsonify({"error": "Unauthorized"}), 401
 
-    session["user_id"] = user.id
+    # Generate JWT token
+    token = jwt.encode({
+        'user': email,
+        'expiration': str(datetime.utcnow() + timedelta(minutes=30))
+    }, app.config['SECRET_KEY'])
+    print("secret key in login user: ")
+    print(app.config['SECRET_KEY'])
 
+    # Set the session or return the token, depending on your use case
+    session["user_id"] = user.id
     return jsonify({
         "id": user.id,
-        "email": user.email
+        "email": user.email,
+        "token": token
     })
 
 
 @app.route("/add_watch_list", methods=["POST"])
-def add_watchlist():
+@token_required
+def add_watchlist(current_user):
     symbol = request.json["symbol"]
 
-    exist_watchlist = WatchList.query.filter_by(symbol=symbol).first()
+    exist_watchlist = WatchList.query.filter_by(
+        symbol=symbol, user_id=current_user.id).first()
     if exist_watchlist:
-        return jsonify({"error": "the symbol had already been existed", 'status': '401'})
+        return jsonify({"error": "Ký hiệu đã tồn tại", 'status': '401'})
 
     if exist_watchlist is None:
         new_watchList = WatchList(
             symbol=symbol
         )
         db.session.add(new_watchList)
-        db.session.commit()  # Commit phiên làm việc để lấy ID
+        db.session.commit()
         exist_watchlist = new_watchList
 
-    return jsonify({'message': 'New Watch Stock added or updated successfully', 'status': '200'})
+    return jsonify({'message': 'Thêm hoặc cập nhật mã cổ phiếu quan sát thành công', 'status': '200'})
 
 
 @app.route("/get_all_watch_list", methods=["GET"])
@@ -301,8 +351,12 @@ def result():
             history = [x for x in train]
             predictions = list()
             for t in range(len(test)):
-                model = ARIMA(history, order=(6, 1, 0)).fit()
-                output = model.forecast()
+                # model = ARIMA(history, order=(6, 1, 0)).fit()
+                model = auto_arima(history, suppress_warnings=True)
+                print('-----------------------------------')
+                print(model)
+                print('-----------------------------------')
+                output = model.predict(n_periods=1)
                 yhat = output[0]
                 predictions.append(yhat)
                 obs = test[t]
@@ -335,7 +389,7 @@ def result():
             plt.plot(test, label='Actual Price')
             plt.plot(predictions, label='Predicted Price')
             plt.legend(loc=4)
-            plt.savefig('static/ARIMA.png')
+            plt.savefig('static/ARIMA1.png')
             plt.close(fig)
             print()
             arima_pred = predictions[-2]
