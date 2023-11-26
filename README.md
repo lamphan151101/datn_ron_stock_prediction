@@ -26,16 +26,3 @@ We believe in the collaborative power of the community. Join our community of da
 Ready to dive into the world of financial intelligence? Clone this repository, explore our codebase, and discover the potential of data-driven investments. Together, we'll navigate the intricate world of finance, one data point at a time.
 
 **Project Live Link:** [InsightfulEquity](http://insightfulequity.pythonanywhere.com)
-
-Join us on this exciting journey, and let's decode the market together. 📈
-
-#Finance #DataAnalysis #InvestmentInsights #OpenSource
-
----
-**Stock Predictions:**
-![Stock Predictions](./static/stock-predictions.jpeg)
-
-
-**Result:**
-![Result](./static/result.jpeg)
-
