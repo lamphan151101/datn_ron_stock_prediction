@@ -60,8 +60,8 @@ const StockPrediciton = () => {
     ];
 	return (
 		<SiteLayout>
-			<Header icon="sort" title="Deposit and Withdraw" />
-            <div className="container">
+			<Header icon="sort" title="Dự đoán giá cổ phiếu" />
+            {/* <div className="container">
                 <div className="first-bg">
                     <div className="row">
                         <div className="children">
@@ -88,7 +88,7 @@ const StockPrediciton = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <Result symbol={formValues.symbol} res={data} />
 		</SiteLayout>
 	);

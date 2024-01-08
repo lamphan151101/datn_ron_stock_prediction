@@ -1,11 +1,8 @@
 .container-props{
     .row{
         .today-stock-data{
-            margin-top: 350px;
             display: flex;
             flex-direction: column;
-            height: 250px;
-            background: #fff;
             border: none;
             margin-bottom: 30px;
             -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
@@ -14,43 +11,13 @@
             border-radius: 0;
             padding: 0;
             .title{
-                background: 0 0;
-                padding: 1.25rem;
-                border-radius: 0;
-                border-color: #ebedf2;
-                h4{
-                    font-family: 'Muli', sans-serif;
-                    font-weight: normal;
-                    color: #282835;
-                    margin-top: 0px;
-                    font-style: normal;
-                    font-weight: 400;
-                    text-transform: normal;
-                }
+                background-image: url('../../../../../static/sentimentCombineImage/netflix_stock_analysis_show_point.png');
+                background-repeat: no-repeat;
+                height: 400px;
+                width: 100%;
+
             }
-            .value{
-                display: flex;
-                justify-content: space-around;
-                .item{
-                    .title-value{
-                        p{
-                            color: #a6a9b7;
-                            font-weight: 400;
-                            font-size: 1rem;
-                            line-height: 1.714rem;
-                        }
-                        h3{
-                            font-family: 'Muli', sans-serif;
-                            font-weight: normal;
-                            color: #282835;
-                            margin-top: 0px;
-                            font-style: normal;
-                            font-weight: 400;
-                            text-transform: normal;
-                        }
-                    }
-                }
-            }
+
         }
         .table-prediction{
             display: flex;
@@ -82,26 +49,78 @@
                         text-transform: normal;
                     }
                 }
-                .image-trend{
-                    background-image: url('../../../../../static/Trends.png');
+                .image-trainning-open-without{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Training_of_Open_feature_without_twitter_sentiment_analysis.png');
                     background-size: 500px;
                     background-repeat: no-repeat;
                     height: 300px;
                 }
-                .image-arima{
-                    background-image: url('../../../../../static/ARIMA.png');
+                .image-trainning-open{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Training_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
                     background-size: 500px;
                     background-repeat: no-repeat;
                     height: 300px;
                 }
-                .image-lstm{
-                    background-image: url('../../../../../static/LSTM.png');
+                .image-trainning-close-without{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Training_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
                     background-size: 500px;
                     background-repeat: no-repeat;
                     height: 300px;
                 }
-                .image-regression{
-                    background-image: url('../../../../../static/LR.png');
+                .image-trainning-close{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Training_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+
+
+                .image-val-open-without{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Validation_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-open{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Validation_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-close-without{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Validation_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-close{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Validation_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+
+
+                .image-test-open-without{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Testing_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-open{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Testing_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-close-without{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Testing_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-close{
+                    background-image: url('../../../../../static/sentimentCombineImage/LSTM_Testing_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
                     background-size: 500px;
                     background-repeat: no-repeat;
                     height: 300px;
@@ -111,7 +130,7 @@
     }
 }
 
-.revenue-overview{
+.image-loss-total{
     background: #fff;
     border: none;
     margin-bottom: 30px;
@@ -120,36 +139,227 @@
     box-shadow: 0 0 20px rgba(115,105,215,.15);
     border-radius: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    .title{
-        background: 0 0;
-        padding: 1.25rem;
-        border-radius: 0;
-        border-color: #ebedf2;
-        border-bottom: 1px solid rgba(0,0,0,.125);
+    .image-loss{
+        background-image: url('../../../../../static/sentimentCombineImage/Training_loss_Vs_Validation_loss_without_twitter_sentiment_analysis.png');
+        background-size: 1000px;
+        background-repeat: no-repeat;
+        height: 400px;
     }
-    .tomorrow-close{
-        display: flex;
-        flex-direction: column;
-        margin-left: 30px;
-        margin-right: 30px;
-        margin-bottom: 30px;
-        .tomorrow-item{
+    .image-loss-without{
+        background-image: url('../../../../../static/sentimentCombineImage/Training_loss_Vs_Validation_loss_including_twitter_sentiment_analysis.png');
+        background-size: 1000px;
+        background-repeat: no-repeat;
+        height: 400px;
+    }
+}
+
+
+.container-props_3{
+    .row{
+        .today-stock-data{
             display: flex;
-            justify-content: space-evenly;
+            flex-direction: column;
+            border: none;
+            margin-bottom: 30px;
+            -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+            -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+            box-shadow: 0 0 20px rgba(115,105,215,.15);
+            border-radius: 0;
+            padding: 0;
+            .title{
+                background-image: url('../../../../../static/sentimentCombineImage/netflix_stock_analysis_show_point.png');
+                background-repeat: no-repeat;
+                height: 400px;
+                width: 100%;
+
+            }
+
         }
-        .tomorrow-title{
-            font-family: 'Muli', sans-serif;
-            font-weight: normal;
-            color: #282835;
-            margin-top: 0px;
-            font-style: normal;
-            font-weight: 400;
-            text-transform: normal;
-            margin-bottom: 0.75rem;
-            line-height: 1.714rem;
+        .table-prediction{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            .table-prediction-image{
+                background: #fff;
+                border: none;
+                margin-bottom: 30px;
+                -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+                -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+                box-shadow: 0 0 20px rgba(115,105,215,.15);
+                border-radius: 0;
+                padding: 0;
+                width: 500px;
+                .table-prediciton-tile{
+                    background: 0 0;
+                    padding: 1.25rem;
+                    border-radius: 0;
+                    border-color: #ebedf2;
+                    h4{
+                        font-family: 'Muli', sans-serif;
+                        font-weight: normal;
+                        color: #282835;
+                        margin-top: 0px;
+                        font-style: normal;
+                        font-weight: 400;
+                        text-transform: normal;
+                    }
+                }
+                .image-trainning-open-without{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Training_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-trainning-open{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Training_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-trainning-close-without{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Training_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-trainning-close{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Training_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+
+
+                .image-val-open-without{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Validation_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-open{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Validation_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-close-without{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Validation_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-close{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Validation_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+
+
+                .image-test-open-without{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Testing_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-open{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Testing_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-close-without{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Testing_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-close{
+                    background-image: url('../../../../../static/three_days/sentimentCombineImage/LSTM_Testing_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+            }
         }
     }
+}
+
+.image-loss-total_3{
+    background: #fff;
+    border: none;
+    margin-bottom: 30px;
+    -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+    -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+    box-shadow: 0 0 20px rgba(115,105,215,.15);
+    border-radius: 0;
+    padding: 0;
+    .image-loss{
+        background-image: url('../../../../../static/three_days/sentimentCombineImage/Training_loss_Vs_Validation_loss_without_twitter_sentiment_analysis.png');
+        background-size: 1000px;
+        background-repeat: no-repeat;
+        height: 400px;
+    }
+    .image-loss-without{
+        background-image: url('../../../../../static/three_days/sentimentCombineImage/Training_loss_Vs_Validation_loss_including_twitter_sentiment_analysis.png');
+        background-size: 1000px;
+        background-repeat: no-repeat;
+        height: 400px;
+    }
+}
+.ant-collapse{
+    // margin-top: 350px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.cards .red {
+  background-color: #f43f5e;
+}
+
+.cards .blue {
+  background-color: #3b82f6;
+}
+
+.cards .green {
+  background-color: #22c55e;
+}
+
+.cards .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 100px;
+  width: 250px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 400ms;
+}
+
+.cards .card p.tip {
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.cards .card p.second-text {
+  font-size: .7em;
+}
+
+.cards .card:hover {
+  transform: scale(1.1, 1.1);
+}
+
+.cards:hover > .card:not(:hover) {
+  filter: blur(10px);
+  transform: scale(0.9, 0.9);
 }
