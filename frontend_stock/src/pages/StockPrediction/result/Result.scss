@@ -308,8 +308,161 @@
         height: 400px;
     }
 }
-.ant-collapse{
-    // margin-top: 350px;
+
+
+.container-props_7{
+    .row{
+        .today-stock-data{
+            display: flex;
+            flex-direction: column;
+            border: none;
+            margin-bottom: 30px;
+            -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+            -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+            box-shadow: 0 0 20px rgba(115,105,215,.15);
+            border-radius: 0;
+            padding: 0;
+            .title{
+                background-image: url('../../../../../static/sentimentCombineImage/netflix_stock_analysis_show_point.png');
+                background-repeat: no-repeat;
+                height: 400px;
+                width: 100%;
+
+            }
+
+        }
+        .table-prediction{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            .table-prediction-image{
+                background: #fff;
+                border: none;
+                margin-bottom: 30px;
+                -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+                -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+                box-shadow: 0 0 20px rgba(115,105,215,.15);
+                border-radius: 0;
+                padding: 0;
+                width: 500px;
+                .table-prediciton-tile{
+                    background: 0 0;
+                    padding: 1.25rem;
+                    border-radius: 0;
+                    border-color: #ebedf2;
+                    h4{
+                        font-family: 'Muli', sans-serif;
+                        font-weight: normal;
+                        color: #282835;
+                        margin-top: 0px;
+                        font-style: normal;
+                        font-weight: 400;
+                        text-transform: normal;
+                    }
+                }
+                .image-trainning-open-without{
+                    background-image: url('../../../../../static/seven_days/LSTM_Training_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-trainning-open{
+                    background-image: url('../../../../../static/seven_days/LSTM_Training_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-trainning-close-without{
+                    background-image: url('../../../../../static/seven_days/LSTM_Training_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-trainning-close{
+                    background-image: url('../../../../../static/seven_days/LSTM_Training_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+
+
+                .image-val-open-without{
+                    background-image: url('../../../../../static/seven_days/LSTM_Validation_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-open{
+                    background-image: url('../../../../../static/seven_days/LSTM_Validation_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-close-without{
+                    background-image: url('../../../../../static/seven_days/LSTM_Validation_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-val-close{
+                    background-image: url('../../../../../static/seven_days/LSTM_Validation_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+
+
+                .image-test-open-without{
+                    background-image: url('../../../../../static/seven_days/LSTM_Testing_of_Open_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-open{
+                    background-image: url('../../../../../static/seven_days/LSTM_Testing_of_Open_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-close-without{
+                    background-image: url('../../../../../static/seven_days/LSTM_Testing_of_Adj\ Close_feature_without_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+                .image-test-close{
+                    background-image: url('../../../../../static/seven_days/LSTM_Testing_of_Adj\ Close_feature_After_adding_twitter_sentiment_analysis.png');
+                    background-size: 500px;
+                    background-repeat: no-repeat;
+                    height: 300px;
+                }
+            }
+        }
+    }
+}
+
+.image-loss-total_7{
+    background: #fff;
+    border: none;
+    margin-bottom: 30px;
+    -webkit-box-shadow: 0 0 20px rgba(115,105,215,.15);
+    -moz-box-shadow: 0 0 20px rgba(115,105,215,.15);
+    box-shadow: 0 0 20px rgba(115,105,215,.15);
+    border-radius: 0;
+    padding: 0;
+    .image-loss{
+        background-image: url('../../../../../static/three_days/sentimentCombineImage/Training_loss_Vs_Validation_loss_without_twitter_sentiment_analysis.png');
+        background-size: 1000px;
+        background-repeat: no-repeat;
+        height: 400px;
+    }
+    .image-loss-without{
+        background-image: url('../../../../../static/three_days/sentimentCombineImage/Training_loss_Vs_Validation_loss_including_twitter_sentiment_analysis.png');
+        background-size: 1000px;
+        background-repeat: no-repeat;
+        height: 400px;
+    }
 }
 
 .cards {

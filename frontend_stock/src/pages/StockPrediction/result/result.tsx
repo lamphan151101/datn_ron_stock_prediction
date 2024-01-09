@@ -278,6 +278,187 @@ const Result = (props: any) => {
             </div>
 
         </div>,
+        },
+        {
+        key: '3',
+        label: 'Dự đoán giá cho 7 ngày sau',
+        children: <div className="container-props_7">
+                <div className="row">
+                    <div className="today-stock-data">
+                        <div className="title">
+                        </div>
+                    </div>
+                    <div className="table-prediction">
+                        <div className="table-prediction-image">
+                            <div className="table-prediciton-tile">
+                                <h4>Dữ liệu huấn luyện giá mở cửa không có twitters</h4>
+                            </div>
+                            <div className="image-trainning-open-without"></div>
+                        </div>
+                        <div className="table-prediction-image">
+                            <div className="table-prediciton-tile">
+                                <h4>Dữ liệu huấn luyện giá mở cửa có twitters</h4>
+                            </div>
+                            <div className="image-trainning-open"></div>
+                        </div>
+                        <div className="table-prediction-image">
+                                <div className="table-prediciton-tile">
+                                    <h4>Dữ liệu huấn luyện giá đóng cửa không có twitters</h4>
+                                </div>
+                            <div className="image-trainning-close-without"></div>
+                            </div>
+                            <div className="table-prediction-image">
+                                <div className="table-prediciton-tile">
+                                    <h4>Dữ liệu huấn luyện giá đóng cửa có twitters</h4>
+                                </div>
+                                <div className="image-trainning-close"></div>
+                        </div>
+
+
+
+
+                    <div className="table-prediction-image">
+                            <div className="table-prediciton-tile">
+                                <h4>Dữ liệu đánh giá giá mở cửa không có twitters</h4>
+                            </div>
+                            <div className="image-val-open-without"></div>
+                        </div>
+                        <div className="table-prediction-image">
+                            <div className="table-prediciton-tile">
+                                <h4>Dữ liệu đánh giá giá mở cửa có twitters</h4>
+                            </div>
+                            <div className="image-val-open"></div>
+                        </div>
+                        <div className="table-prediction-image">
+                                <div className="table-prediciton-tile">
+                                    <h4>Dữ liệu đánh giá giá đóng cửa không có twitters</h4>
+                                </div>
+                            <div className="image-val-close-without"></div>
+                            </div>
+                            <div className="table-prediction-image">
+                                <div className="table-prediciton-tile">
+                                    <h4>Dữ liệu đánh giá giá đóng cửa có twitters</h4>
+                                </div>
+                                <div className="image-val-close"></div>
+                    </div>
+
+
+
+                        <div className="table-prediction-image">
+                            <div className="table-prediciton-tile">
+                                <h4>Dữ liệu kiểm tra giá mở cửa không có twitters</h4>
+                            </div>
+                            <div className="image-test-open-without"></div>
+                        </div>
+                        <div className="table-prediction-image">
+                            <div className="table-prediciton-tile">
+                                <h4>Dữ liệu kiểm tra giá mở cửa có twitters</h4>
+                            </div>
+                            <div className="image-test-open"></div>
+                        </div>
+                        <div className="table-prediction-image">
+                                <div className="table-prediciton-tile">
+                                    <h4>Dữ liệu kiểm tra giá đóng cửa không có twitters</h4>
+                                </div>
+                            <div className="image-test-close-without"></div>
+                            </div>
+                            <div className="table-prediction-image">
+                                <div className="table-prediciton-tile">
+                                    <h4>Dữ liệu kiểm tra giá đóng cửa có twitters</h4>
+                                </div>
+                                <div className="image-test-close"></div>
+                    </div>
+                </div>
+                    <div className="image-loss-total_7">
+                        <h2>Mất mát huấn luyện và mất mát đánh giá của dữ liệu có phân tích cảm xúc</h2>
+                    <div className="image-loss"></div>
+                </div>
+                    <div className="image-loss-total">
+                        <h2>Mất mát huấn luyện và mất mát đánh giá của dữ liệu không có phân tích cảm xúc</h2>
+                    <div className="image-loss-without"></div>
+                    </div>
+
+
+                </div>
+            <div><BasicTable data={3} /></div>
+            <div className="cards">
+                <div className="item-red" style={{
+                    display: 'flex', flexDirection: 'column', gap: '5px'
+                }}>
+                    <div className="card red">
+                        <p className="tip">Giá thực tế</p>
+                        {/* <p className="second-text">Open: 185.2 Close: 184.05</p> */}
+                    </div>
+                    <div className="card red">
+                        {/* <p className="tip"></p> */}
+                        <p className="second-text">Open: 179.55 Close: 178.36</p>
+                    </div>
+                    <div className="card red">
+                        {/* <p className="tip">Giá thực tế</p> */}
+                        <p className="second-text">Open: 177.07 Close: 174.86</p>
+                    </div>
+                    <div className="card red">
+                        {/* <p className="tip">Giá thực tế</p> */}
+                        <p className="second-text">Open: 176.49 Close: 179.94</p>
+                    </div>
+                     <div className="card red">
+                        {/* <p className="tip"></p> */}
+                        <p className="second-text">Open: 176.27 Close: 185.88</p>
+                    </div>
+                    <div className="card red">
+                        {/* <p className="tip">Giá thực tế</p> */}
+                        <p className="second-text">Open: 185.19 Close: 184.059</p>
+                    </div>
+                     <div className="card red">
+                        {/* <p className="tip"></p> */}
+                        <p className="second-text">Open: 184.27 Close: 189.27</p>
+                    </div>
+                    <div className="card red">
+                        {/* <p className="tip"></p> */}
+                        <p className="second-text">Open: 186.02 Close: 186.97</p>
+                    </div>
+
+                </div>
+                <div className="item-blue" style={{
+                    display: 'flex', flexDirection: 'column', gap: '5px'
+                }}>
+                    <div className="card blue">
+                        <p className="tip">Giá dự đoán</p>
+                        {/* <p className="second-text">Open: 172.48077 Close: 207.92961</p> */}
+                    </div>
+                    <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 262.52 Close: 282.74</p>
+                    </div>
+                    <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 281.85 Close: 293.71</p>
+                    </div>
+                    <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 289.61 Close: 309.70</p>
+                    </div>
+                    <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 310.26 Close: 300.2</p>
+                    </div>
+                    <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 295.68 Close: 283.64</p>
+                    </div>
+                    <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 316.09 Close: 310.21</p>
+                    </div>
+                     <div className="card blue">
+                        {/* <p className="tip">Giá dự đoán</p> */}
+                        <p className="second-text">Open: 296.18 Close: 313.08</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>,
     }
     ];
     const onChange = (key: string | string[]) => {
