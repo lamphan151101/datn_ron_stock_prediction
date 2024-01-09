@@ -33,6 +33,7 @@ from flask_mail import Mail, Message
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
 import numpy as np
+from math import sqrt
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
@@ -1328,6 +1329,292 @@ def sentimentCombineMain3():
     #Perform inverse transformation to rescale back to original range
     print(prediction)
     prediction = prediction.reshape(3,2)
+    prediction=scaler_for_inference.inverse_transform(prediction)
+
+    # Convert timestamp to date
+
+    print(prediction)
+
+    result = {
+        'loss_twitter_3': loss_twitter_3,
+        'loss_without_twitter_3': loss_without_twitter_3,
+        'accuracy_twitter_3': accuracy_twitter_3,
+        'accuracy_without_twitter_3': accuracy_without_twitter_3
+    }
+    return jsonify(result)
+
+
+@app.route('/sentiment_combine_7', methods=['POST'])
+def sentimentCombineMain7():
+    df = pd.read_csv('C:/Users/lamph/Desktop/datn_ron_stock_prediction/sentimentModel/dataset/Final_nflx_data_2018-2022.csv')
+    df['date'] = pd.to_datetime(df['date'])
+    plt.figure(figsize=(13, 6), dpi=65)
+    sns.lineplot(x=df["date"],y=df["Adj Close"])
+    df['sentiment_analysis']=df['P_mean']
+    df['sentiment_analysis']=df['sentiment_analysis'].apply(lambda x: 'pos' if x>0 else 'nue' if x==0 else 'neg')
+    sns.scatterplot(x=df["date"],y=df['Adj Close'],hue=df['sentiment_analysis'],palette=['y','r','g'])
+    plt.xticks(rotation=45)
+    plt.title("Stock market of Netfilx from Jan-2018 to Jul-2022",fontsize=16)
+    plt.savefig(
+        'C:/Users/lamph/Desktop/datn_ron_stock_prediction/static/seven_days/netflix_stock_analysis_show_point.png')
+    cols = [
+        'Open',
+        'High', 'Low',
+        'Close',
+        'Volume',
+        'Adj Close',
+        'P_mean',
+            ]
+    #Date and volume columns are not used in training.
+    print(cols)
+
+    #New dataframe with only training data - 5 columns
+    df_for_training = df[cols].astype(float)
+    df_for_training.index=df['date']
+
+    scaler = MinMaxScaler()
+    scaler = scaler.fit(df_for_training)
+    df_for_training_scaled = scaler.transform(df_for_training)
+
+    scaler_for_inference = MinMaxScaler()
+    scaler_for_inference.fit_transform(df_for_training.loc[:,['Open','Adj Close']])
+
+     #Empty lists to be populated using formatted training data
+    trainX = []
+    trainY = []
+    print(len(df_for_training_scaled))
+
+    n_future = 7   # Number of days we want to look into the future based on the past days. ###
+    n_past = 20  # Number of past days we want to use to predict the future.
+
+    #Reformat input data into a shape: (n_samples x timesteps x n_features)
+    #In my example, my df_for_training_scaled has a shape (12823, 5)
+    #12823 refers to the number of data points and 5 refers to the columns (multi-variables).
+    for i in range(n_past, len(df_for_training_scaled) - n_future +1):
+        trainX.append(df_for_training_scaled[i - n_past:i, 0:df_for_training.shape[1]])
+        trainY.append(df_for_training_scaled[i:i + n_future,[0,-2]]) ###
+
+    trainX, trainY = np.array(trainX), np.array(trainY)
+    # trainY = trainY.reshape(trainY.shape[0], -1, trainY.shape[1]*trainY.shape[2])### vecto đầu ra là 1-6 vì thế cần resshape tập train về 1 - 6
+
+    print('train X: ', trainX)
+    print('train Y: ', trainY)
+    print('TrainX shape = {}.'.format(trainX.shape)) # (1116 - sample, 5 - time stamp , 7 - feature)
+    print('TrainY shape = {}.'.format(trainY.shape)) # (1116 - sample, 1 - time stamp , 6 - feature)
+
+
+    X_train_lstm_without_twitter, X_test_lstm_without_twitter, y_train_lstm_without_twitter, y_test_lstm_without_twitter = train_test_split(trainX[:,:,:-1], trainY, test_size=0.2, shuffle=False)
+
+    X_train_lstm_twitter, X_test_lstm_twitter, y_train_lstm_twitter, y_test_lstm_twitter = train_test_split(trainX, trainY, test_size=0.2, shuffle=False)
+
+    X_train_lstm_without_twitter, X_val_lstm_without_twitter, y_train_lstm_without_twitter, y_val_lstm_without_twitter = train_test_split(X_train_lstm_without_twitter, y_train_lstm_without_twitter, test_size=0.2, shuffle=False)
+
+    X_train_lstm_twitter, X_val_lstm_twitter, y_train_lstm_twitter, y_val_lstm_twitter = train_test_split(X_train_lstm_twitter, y_train_lstm_twitter, test_size=0.2, shuffle=False)
+
+
+
+    def build_model(input_shape):
+        print('=======================')
+        print(input_shape)
+        print('=======================')
+        tf.random.set_seed(seed)
+        cnn_lstm_model = Sequential()
+
+        cnn_lstm_model.add(Conv1D(filters=256, kernel_size=2, strides=1, padding='valid', input_shape=input_shape))
+        cnn_lstm_model.add(MaxPooling1D(pool_size=2, strides=2))
+
+        cnn_lstm_model.add(Conv1D(filters=128, kernel_size=2, strides=1, padding='valid'))
+        cnn_lstm_model.add(MaxPooling1D(pool_size=1, strides=2))
+
+        cnn_lstm_model.add(Bidirectional(LSTM(512, return_sequences=True)))
+        cnn_lstm_model.add(Dropout(0.3))
+        cnn_lstm_model.add(Bidirectional(LSTM(512, return_sequences=True)))
+        cnn_lstm_model.add(Dropout(0.3))
+
+        cnn_lstm_model.add(Dense(16, activation='relu'))
+        cnn_lstm_model.add(Flatten())
+        cnn_lstm_model.add(Dense(7 * 2, activation='linear'))  # Adjust units to 3 * 2
+
+        # Reshape the output to have the desired shape (None, 3, 2)
+        cnn_lstm_model.add(Reshape((7, 2)))
+
+        cnn_lstm_model.compile(optimizer='adam', loss='mse', metrics=[keras.metrics.RootMeanSquaredError()])
+        cnn_lstm_model.summary()
+        return cnn_lstm_model
+
+    # fit the model
+
+    cnn_lstm_model_without_twitter=build_model((X_train_lstm_without_twitter.shape[1],X_train_lstm_without_twitter.shape[2]))
+    cnn_lstm_model_twitter=build_model((X_train_lstm_twitter.shape[1],X_train_lstm_twitter.shape[2]))
+
+    history_without_twitter = cnn_lstm_model_without_twitter.fit(X_train_lstm_without_twitter, y_train_lstm_without_twitter, epochs=200, batch_size=64, validation_data=(X_val_lstm_without_twitter, y_val_lstm_without_twitter), verbose=1, )
+    loss_without_twitter_3, accuracy_without_twitter_3 = cnn_lstm_model_without_twitter.evaluate(X_test_lstm_without_twitter, y_test_lstm_without_twitter)
+    history_twitter = cnn_lstm_model_twitter.fit(X_train_lstm_twitter, y_train_lstm_twitter, epochs=200, batch_size=64, validation_data=(X_val_lstm_twitter, y_val_lstm_twitter), verbose=1, )
+    loss_twitter_3, accuracy_twitter_3 = cnn_lstm_model_twitter.evaluate(X_test_lstm_twitter, y_test_lstm_twitter)
+
+    plt.figure(figsize=(13, 6), dpi=65)
+    plt.plot(history_without_twitter.history['loss'], label='Training loss')
+    plt.plot(history_without_twitter.history['val_loss'], label='Validation loss')
+    plt.title('Training loss Vs. Validation loss without twitter sentiment analysis')
+    plt.savefig('C:/Users/lamph/Desktop/datn_ron_stock_prediction/static/seven_days/Training_loss_Vs_Validation_loss_without_twitter_sentiment_analysis.png')
+    plt.legend()
+
+    plt.figure(figsize=(13, 6), dpi=65)
+    plt.plot(history_twitter.history['loss'], label='Training loss')
+    plt.plot(history_twitter.history['val_loss'], label='Validation loss')
+    plt.title('Training loss Vs. Validation loss including twitter sentiment analysis')
+    plt.savefig('C:/Users/lamph/Desktop/datn_ron_stock_prediction/static/seven_days/Training_loss_Vs_Validation_loss_including_twitter_sentiment_analysis.png')
+    plt.legend()
+
+    def plot_predictions_with_dates (type,twitter,dates,y_actual_lstm,y_pred_lstm):
+        predicted_features=['Open','Adj Close']
+        print('y_actual_lstm', y_actual_lstm)
+        print('y_pred_lstm', y_pred_lstm)
+        for i,predicted_feature in enumerate(predicted_features):
+            # print('y_actual_lstm', y_actual_lstm)
+            # print('y_pred_lstm', y_pred_lstm)
+            plt.figure(figsize=(15,6))
+            if twitter :
+                plt.title(f'LSTM {type} prediction of {predicted_feature} feature After adding twitter sentiment analysis')
+            else:
+                plt.title(f'LSTM {type} prediction of {predicted_feature} feature without twitter sentiment analysis')
+            sns.lineplot(x=dates, y=y_actual_lstm[:,0,i],label='Actual')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,0,i], label='Predicted 1 day')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,1,i], label='Predicted 2 day')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,2,i], label='Predicted 3 day')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,3,i], label='Predicted 4 day')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,4,i], label='Predicted 5 day')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,5,i], label='Predicted 6 day')
+            sns.lineplot(x=dates, y=y_pred_lstm[:,6,i], label='Predicted 7 day')
+            if twitter:
+                plt.savefig(
+                    f'C:/Users/lamph/Desktop/datn_ron_stock_prediction/static/seven_days/LSTM_{type}_of_{predicted_feature}_feature_After_adding_twitter_sentiment_analysis.png')
+            else:
+                plt.savefig(
+                    f'C:/Users/lamph/Desktop/datn_ron_stock_prediction/static/seven_days/LSTM_{type}_of_{predicted_feature}_feature_without_twitter_sentiment_analysis.png')
+            plt.show()
+            error=sqrt(mean_squared_error(y_actual_lstm[:,i], y_pred_lstm[:, i]))
+            print(f'Mean square error for {predicted_feature} ={error}')
+        print('Total mean square error', sqrt(mean_squared_error(y_actual_lstm.reshape(-1,2), y_pred_lstm.reshape(-1,2))))
+
+    training_dates= df_for_training.index[:X_train_lstm_without_twitter.shape[0]]
+    #Make prediction
+    training_prediction_without_twitter = cnn_lstm_model_without_twitter.predict(X_train_lstm_without_twitter)
+    training_prediction_twitter = cnn_lstm_model_twitter.predict(X_train_lstm_twitter)
+
+    print(training_prediction_without_twitter.shape)
+
+    training_prediction_without_twitter=training_prediction_without_twitter.reshape(training_prediction_without_twitter.shape[0], training_prediction_without_twitter.shape[2]*training_prediction_without_twitter.shape[1])
+    training_prediction_twitter=training_prediction_twitter.reshape(training_prediction_twitter.shape[0], training_prediction_twitter.shape[2]*training_prediction_twitter.shape[1])
+
+    print('y_train_pred_lstm_without_twitter 1', training_prediction_without_twitter)
+    reshaped_arrays = [arr.reshape(7, 2) for arr in training_prediction_without_twitter]
+    training_prediction_without_twitter = np.concatenate(reshaped_arrays, axis=0)
+
+    reshaped_arrays_add = [arr.reshape(7, 2) for arr in training_prediction_twitter]
+    training_prediction_twitter = np.concatenate(reshaped_arrays_add, axis=0)
+
+    y_train_pred_lstm_without_twitter = scaler_for_inference.inverse_transform(training_prediction_without_twitter)
+    y_train_pred_lstm_twitter = scaler_for_inference.inverse_transform(training_prediction_twitter)
+
+    y_train_lstm_reshaped_without_twitter=y_train_lstm_without_twitter.reshape(y_train_lstm_without_twitter.shape[0], y_train_lstm_without_twitter.shape[2]*y_train_lstm_without_twitter.shape[1])
+
+    reshaped_arrays_y = [arr.reshape(7, 2) for arr in y_train_lstm_reshaped_without_twitter]
+    # y_train_lstm_reshaped_without_twitter = np.concatenate(reshaped_arrays_add, axis=0)
+    y_train_lstm_reshaped_without_twitter = np.concatenate(reshaped_arrays_y, axis=0)
+
+    y_train_actual_lstm = scaler_for_inference.inverse_transform(y_train_lstm_reshaped_without_twitter)
+    print(len(y_train_pred_lstm_without_twitter), 'fdf')
+    print(len(y_train_actual_lstm), 'âs')
+    y_train_pred_lstm_without_twitter = y_train_pred_lstm_without_twitter.reshape(y_train_pred_lstm_without_twitter.shape[0]//7, 7,2)
+    y_train_actual_lstm = y_train_actual_lstm.reshape(y_train_actual_lstm.shape[0]//7, 7,2)
+    y_train_pred_lstm_twitter = y_train_pred_lstm_twitter.reshape(y_train_pred_lstm_twitter.shape[0]//7, 7, 2)
+
+    plot_predictions_with_dates('Training',False,training_dates,y_train_actual_lstm,y_train_pred_lstm_without_twitter)
+
+    # print('before 1: ', y_train_actual_lstm)
+    # print('before 2: ', y_train_pred_lstm_twitter)
+    plot_predictions_with_dates('Training',True,training_dates,y_train_actual_lstm,y_train_pred_lstm_twitter)
+    # mean_squared_error(y_train_actual_lstm[:,0], y_train_pred_lstm_twitter[:, 0])
+
+    validation_dates= df_for_training.index[X_train_lstm_without_twitter.shape[0]:X_train_lstm_without_twitter.shape[0] + X_val_lstm_without_twitter.shape[0]]
+    #Make prediction
+    validation_prediction_without_twitter = cnn_lstm_model_without_twitter.predict(X_val_lstm_without_twitter)
+
+    validation_prediction_twitter = cnn_lstm_model_twitter.predict(X_val_lstm_twitter)
+
+    validation_prediction_without_twitter=validation_prediction_without_twitter.reshape(validation_prediction_without_twitter.shape[0], validation_prediction_without_twitter.shape[2]*validation_prediction_without_twitter.shape[1])
+
+
+    validation_prediction_twitter=validation_prediction_twitter.reshape(validation_prediction_twitter.shape[0], validation_prediction_twitter.shape[2]*validation_prediction_twitter.shape[1])
+    reshaped_arrays = [arr.reshape(7, 2) for arr in validation_prediction_without_twitter]
+    validation_prediction_without_twitter = np.concatenate(reshaped_arrays, axis=0)
+
+    reshaped_arrays_val = [arr.reshape(7, 2) for arr in validation_prediction_twitter]
+    validation_prediction_twitter = np.concatenate(reshaped_arrays_val, axis=0)
+
+    y_val_pred_lstm_without_twitter = scaler_for_inference.inverse_transform(validation_prediction_without_twitter)
+    y_val_pred_lstm_twitter = scaler_for_inference.inverse_transform(validation_prediction_twitter)
+
+    y_val_actual_lstm_reshaped_without_twitter=y_val_lstm_without_twitter.reshape(y_val_lstm_without_twitter.shape[0], y_val_lstm_without_twitter.shape[2]*y_val_lstm_without_twitter.shape[1])
+    reshaped_arrays_val_actual = [arr.reshape(7, 2) for arr in y_val_actual_lstm_reshaped_without_twitter]
+    y_val_actual_lstm_reshaped_without_twitter = np.concatenate(reshaped_arrays_val_actual, axis=0)
+    y_val_actual_lstm = scaler_for_inference.inverse_transform(y_val_actual_lstm_reshaped_without_twitter)
+
+    y_val_pred_lstm_without_twitter = y_val_pred_lstm_without_twitter.reshape(y_val_pred_lstm_without_twitter.shape[0]//7, 7,2)
+    y_val_actual_lstm = y_val_actual_lstm.reshape(y_val_actual_lstm.shape[0]//7, 7,2)
+    y_val_pred_lstm_twitter = y_val_pred_lstm_twitter.reshape(y_val_pred_lstm_twitter.shape[0]//7, 7, 2)
+
+    plot_predictions_with_dates('Validation',False,validation_dates,y_val_actual_lstm,y_val_pred_lstm_without_twitter)
+
+    plot_predictions_with_dates('Validation',True,validation_dates,y_val_actual_lstm,y_val_pred_lstm_twitter)
+
+    testing_dates= df_for_training.index[-X_test_lstm_without_twitter.shape[0]:]
+    #Make prediction
+    testing_prediction_without_twitter = cnn_lstm_model_without_twitter.predict(X_test_lstm_without_twitter)
+    testing_prediction_twitter = cnn_lstm_model_twitter.predict(X_test_lstm_twitter)
+
+    testing_prediction_without_twitter=testing_prediction_without_twitter.reshape(testing_prediction_without_twitter.shape[0], testing_prediction_without_twitter.shape[2]*testing_prediction_without_twitter.shape[1])
+    testing_prediction_twitter=testing_prediction_twitter.reshape(testing_prediction_twitter.shape[0], testing_prediction_twitter.shape[2]*testing_prediction_twitter.shape[1])
+
+    reshaped_arrays_val = [arr.reshape(7, 2) for arr in testing_prediction_without_twitter]
+    testing_prediction_without_twitter = np.concatenate(reshaped_arrays_val, axis=0)
+
+    y_test_pred_lstm_without_twitter = scaler_for_inference.inverse_transform(testing_prediction_without_twitter)
+
+    reshaped_arrays = [arr.reshape(7, 2) for arr in testing_prediction_twitter]
+    testing_prediction_twitter = np.concatenate(reshaped_arrays, axis=0)
+
+    y_test_pred_lstm_twitter = scaler_for_inference.inverse_transform(testing_prediction_twitter)
+
+    y_test_actual_lstm_reshaped_without_twitter=y_test_lstm_without_twitter.reshape(y_test_lstm_without_twitter.shape[0], y_test_lstm_without_twitter.shape[2]*y_test_lstm_without_twitter.shape[1])
+
+    reshaped_arrays_test = [arr.reshape(7, 2) for arr in y_test_actual_lstm_reshaped_without_twitter]
+    y_test_actual_lstm_reshaped_without_twitter = np.concatenate(reshaped_arrays_test, axis=0)
+
+    y_test_actual_lstm = scaler_for_inference.inverse_transform(y_test_actual_lstm_reshaped_without_twitter)
+
+    y_test_pred_lstm_without_twitter = y_test_pred_lstm_without_twitter.reshape(y_test_pred_lstm_without_twitter.shape[0]//7, 7,2)
+    y_test_actual_lstm = y_test_actual_lstm.reshape(y_test_actual_lstm.shape[0]//7, 7,2)
+    y_test_pred_lstm_twitter = y_test_pred_lstm_twitter.reshape(y_test_pred_lstm_twitter.shape[0]//7, 7, 2)
+
+    plot_predictions_with_dates('Testing',False,testing_dates,y_test_actual_lstm,y_test_pred_lstm_without_twitter)
+
+    plot_predictions_with_dates('Testing',True,testing_dates,y_test_actual_lstm,y_test_pred_lstm_twitter)
+
+    features= ['Open','High', 'Low','Close','Volume','Adj Close','P_mean']
+    df_for_training.iloc[-n_past:,:].to_numpy().reshape(1,n_past,len(features)).shape
+    x_forcast = df_for_training.iloc[-n_past-2:-2, :]
+    x_forcast = scaler.transform(x_forcast).reshape(1, n_past, len(features))
+    print(x_forcast)
+    x_forcast=df_for_training.iloc[-n_past-3:-3,:] ## sự đoán cho 3 ngày cần dữ liệu 5 ngày
+    print(x_forcast)
+    x_forcast=scaler.transform(x_forcast).reshape(1,n_past,len(features))
+    prediction = cnn_lstm_model_twitter.predict(x_forcast) #shape = (n, 1) where n is the n_days_for_prediction
+    # prediction=prediction.reshape(prediction.shape[0],prediction.shape[2])
+    #Perform inverse transformation to rescale back to original range
+    print(prediction)
+    prediction = prediction.reshape(7,2)
     prediction=scaler_for_inference.inverse_transform(prediction)
 
     # Convert timestamp to date

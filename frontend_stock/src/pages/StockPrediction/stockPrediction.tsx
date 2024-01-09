@@ -6,7 +6,7 @@ import FormInput from "../../components/FormInput/FormInput";
 import FormButton from "../../components/FormInput/FormButton";
 import httpClient from "../../httpClient";
 import Result from "./result/result";
-import ChartComponent from "./lineChart/lineChart";
+import PieChart from "./pieChart/pieChart";
 export {};
 
     interface FormValues {
@@ -61,9 +61,9 @@ const StockPrediciton = () => {
 	return (
 		<SiteLayout>
 			<Header icon="sort" title="Dự đoán giá cổ phiếu" />
-            {/* <div className="container">
+            <div className="container">
                 <div className="first-bg">
-                    <div className="row">
+                    {/* <div className="row">
                         <div className="children">
                             <div className="children-image"></div><div className="children-text">
                                 <h3>Enter a Stock Symbol for Market Insights</h3>
@@ -86,9 +86,10 @@ const StockPrediciton = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
-            </div> */}
+                {/* <PieChart/> */}
+            </div>
             <Result symbol={formValues.symbol} res={data} />
 		</SiteLayout>
 	);

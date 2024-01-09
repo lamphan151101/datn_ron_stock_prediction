@@ -2,40 +2,44 @@
     .first-bg{
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
         padding: 65px;
-        margin-bottom: -300px;
+        margin-bottom: 30px;
         background: #fff;
-        .row{
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -15px;
-            margin-left: -15px;
+        background-image: url('../../../../static/sentimentCombineImage/netflix_stock_analysis_show_point.png');
+        background-repeat: no-repeat;
+        height: 400px;
+        width: 100%;
+        // .row{
+        //     display: flex;
+        //     flex-wrap: wrap;
+        //     margin-right: -15px;
+        //     margin-left: -15px;
 
-            .children{
-                display: flex;
-                flex-direction: row;
-                .children-image{
-                     background-image: url('../../images/img/stock.png');
-                    background-repeat: no-repeat;
-                    height: 500px;
-                    padding-right: 491px;
-                }
-                .children-text{
-                    display: flex;
-                    flex-direction: column;
-                    text-align: left;
-                    h3{
-                        font-size: 24px;
-                        font-weight: 900;
-                        margin-bottom: 10px;
-                    }
-                    p{
-                        margin-bottom: 21px;
-                        padding-right: 10px;
-                        color: #282835;
-                    }
-                }
-            }
-        }
+        //     .children{
+        //         display: flex;
+        //         flex-direction: row;
+        //         .children-image{
+        //              background-image: url('../../images/img/stock.png');
+        //             background-repeat: no-repeat;
+        //             height: 500px;
+        //             padding-right: 491px;
+        //         }
+        //         .children-text{
+        //             display: flex;
+        //             flex-direction: column;
+        //             text-align: left;
+        //             h3{
+        //                 font-size: 24px;
+        //                 font-weight: 900;
+        //                 margin-bottom: 10px;
+        //             }
+        //             p{
+        //                 margin-bottom: 21px;
+        //                 padding-right: 10px;
+        //                 color: #282835;
+        //             }
+        //         }
+        //     }
+        // }
     }
 
 }
