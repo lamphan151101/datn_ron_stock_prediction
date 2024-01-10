@@ -964,8 +964,7 @@ header .header-right .header-user .signout i {
 }
 
 .navbar .logo img {
-  width: 130px;
-  height: 28px;
+  height: 55px;
 }
 
 .navbar h3 {
@@ -1019,7 +1018,7 @@ header .header-right .header-user .signout i {
 .navbar .copyright {
   color: #666666;
   font-size: 0.8em;
-  margin-top: 378px;
+  margin-top: 320px;
   line-height: 160%;
 }
 
