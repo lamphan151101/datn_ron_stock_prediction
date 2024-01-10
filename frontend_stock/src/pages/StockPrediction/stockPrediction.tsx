@@ -7,6 +7,7 @@ import FormButton from "../../components/FormInput/FormButton";
 import httpClient from "../../httpClient";
 import Result from "./result/result";
 import PieChart from "./pieChart/pieChart";
+import PieActiveArc from "./pieChart/pieChart";
 export {};
 
     interface FormValues {
@@ -88,7 +89,8 @@ const StockPrediciton = () => {
                         </div>
                     </div> */}
                 </div>
-                {/* <PieChart/> */}
+                <div className="second-bg"><PieActiveArc/></div>
+
             </div>
             <Result symbol={formValues.symbol} res={data} />
 		</SiteLayout>

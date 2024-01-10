@@ -24,8 +24,7 @@ const Result = (props: any) => {
             <div className="container-props">
                 <div className="row">
                     <div className="today-stock-data">
-                        <div className="title">
-                        </div>
+                    
                     </div>
                     <div className="table-prediction">
                         <div className="table-prediction-image">
@@ -129,7 +128,8 @@ const Result = (props: any) => {
                         <p className="tip">Giá dự đoán</p>
                         <p className="second-text">Open: 172.48077 Close: 207.92961</p>
                     </div>
-            </div>
+                </div>
+
         </div>
     },
     {
@@ -138,8 +138,7 @@ const Result = (props: any) => {
         children: <div className="container-props_3">
                 <div className="row">
                     <div className="today-stock-data">
-                        <div className="title">
-                        </div>
+                    
                     </div>
                     <div className="table-prediction">
                         <div className="table-prediction-image">
@@ -278,15 +277,14 @@ const Result = (props: any) => {
             </div>
 
         </div>,
-        },
-        {
+    },
+    {
         key: '3',
         label: 'Dự đoán giá cho 7 ngày sau',
         children: <div className="container-props_7">
                 <div className="row">
                     <div className="today-stock-data">
-                        <div className="title">
-                        </div>
+                    
                     </div>
                     <div className="table-prediction">
                         <div className="table-prediction-image">

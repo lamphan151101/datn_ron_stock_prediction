@@ -8,7 +8,7 @@ const Navbar: FC = memo(() => (
 	<nav className="navbar-inner no-select">
 		<div className="logo">
 			<Link to="/market">
-				<img src="/images/logo.png" alt="Crypto Exchange" draggable="false" />
+				<img src="https://cdn5.vectorstock.com/i/1000x1000/01/89/circle-wolf-logo-design-concept-vector-21160189.jpg" alt="Stock Prediciton" draggable="false" />
 			</Link>
 		</div>
 		<h3>Main Menu</h3>
@@ -39,7 +39,7 @@ const Navbar: FC = memo(() => (
 				/>
 			</li>
 		</ul>
-		<h3>Others</h3>
+		{/* <h3>Others</h3>
 		<ul>
 			<li>
 				<NavbarButton url="/members" icon="account_circle" title="Profile" />
@@ -53,7 +53,7 @@ const Navbar: FC = memo(() => (
 			<li>
 				<NavbarButton url="/settings" icon="settings" title="Settings" />
 			</li>
-		</ul>
+		</ul> */}
 		<div className="copyright">
 			<strong>Stock Prediction</strong>
 			<p>
