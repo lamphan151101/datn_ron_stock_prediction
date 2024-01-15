@@ -24,7 +24,7 @@ const Result = (props: any) => {
             <div className="container-props">
                 <div className="row">
                     <div className="today-stock-data">
-                    
+
                     </div>
                     <div className="table-prediction">
                         <div className="table-prediction-image">
@@ -138,7 +138,7 @@ const Result = (props: any) => {
         children: <div className="container-props_3">
                 <div className="row">
                     <div className="today-stock-data">
-                    
+
                     </div>
                     <div className="table-prediction">
                         <div className="table-prediction-image">
@@ -239,40 +239,18 @@ const Result = (props: any) => {
                 }}>
                     <div className="card red">
                         <p className="tip">Giá thực tế</p>
-                        {/* <p className="second-text">Open: 185.2 Close: 184.05</p> */}
+                        <p className="second-text">Open: 185.2 Close: 184.05</p>
                     </div>
-                    <div className="card red">
-                        {/* <p className="tip"></p> */}
-                        <p className="second-text">Open: 184.27 Close: 189.27</p>
-                    </div>
-                    <div className="card red">
-                        {/* <p className="tip">Giá thực tế</p> */}
-                        <p className="second-text">Open: 186.02 Close: 186.97</p>
-                    </div>
-                    <div className="card red">
-                        {/* <p className="tip">Giá thực tế</p> */}
-                        <p className="second-text">Open: 186.02 Close: 186.97</p>
-                    </div>
+
                 </div>
                 <div className="item-blue" style={{
                     display: 'flex', flexDirection: 'column', gap: '5px'
                 }}>
                     <div className="card blue">
                         <p className="tip">Giá dự đoán</p>
-                        {/* <p className="second-text">Open: 172.48077 Close: 207.92961</p> */}
+                        <p className="second-text">Open: 194.1909 Close: 194.12859</p>
                     </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 187.6 Close: 193.8</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 194.13 Close: 211.43</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 175.27 Close: 173.09</p>
-                    </div></div>
+                </div>
 
             </div>
 
@@ -284,7 +262,7 @@ const Result = (props: any) => {
         children: <div className="container-props_7">
                 <div className="row">
                     <div className="today-stock-data">
-                    
+
                     </div>
                     <div className="table-prediction">
                         <div className="table-prediction-image">
@@ -385,72 +363,15 @@ const Result = (props: any) => {
                 }}>
                     <div className="card red">
                         <p className="tip">Giá thực tế</p>
-                        {/* <p className="second-text">Open: 185.2 Close: 184.05</p> */}
+                        <p className="second-text">Open: 185.2 Close: 184.05</p>
                     </div>
-                    <div className="card red">
-                        {/* <p className="tip"></p> */}
-                        <p className="second-text">Open: 179.55 Close: 178.36</p>
-                    </div>
-                    <div className="card red">
-                        {/* <p className="tip">Giá thực tế</p> */}
-                        <p className="second-text">Open: 177.07 Close: 174.86</p>
-                    </div>
-                    <div className="card red">
-                        {/* <p className="tip">Giá thực tế</p> */}
-                        <p className="second-text">Open: 176.49 Close: 179.94</p>
-                    </div>
-                     <div className="card red">
-                        {/* <p className="tip"></p> */}
-                        <p className="second-text">Open: 176.27 Close: 185.88</p>
-                    </div>
-                    <div className="card red">
-                        {/* <p className="tip">Giá thực tế</p> */}
-                        <p className="second-text">Open: 185.19 Close: 184.059</p>
-                    </div>
-                     <div className="card red">
-                        {/* <p className="tip"></p> */}
-                        <p className="second-text">Open: 184.27 Close: 189.27</p>
-                    </div>
-                    <div className="card red">
-                        {/* <p className="tip"></p> */}
-                        <p className="second-text">Open: 186.02 Close: 186.97</p>
-                    </div>
-
                 </div>
                 <div className="item-blue" style={{
                     display: 'flex', flexDirection: 'column', gap: '5px'
                 }}>
                     <div className="card blue">
                         <p className="tip">Giá dự đoán</p>
-                        {/* <p className="second-text">Open: 172.48077 Close: 207.92961</p> */}
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 262.52 Close: 282.74</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 281.85 Close: 293.71</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 289.61 Close: 309.70</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 310.26 Close: 300.2</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 295.68 Close: 283.64</p>
-                    </div>
-                    <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 316.09 Close: 310.21</p>
-                    </div>
-                     <div className="card blue">
-                        {/* <p className="tip">Giá dự đoán</p> */}
-                        <p className="second-text">Open: 296.18 Close: 313.08</p>
+                        <p className="second-text">Open: 276.5797 Close: 276.03284</p>
                     </div>
                 </div>
 

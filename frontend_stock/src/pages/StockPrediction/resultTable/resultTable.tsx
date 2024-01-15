@@ -18,28 +18,28 @@ function createData(
 
 export default function BasicTable(props: any) {
     const rows_1 = [
-        createData('RMSE huấn luyện giá mở cửa', 10.72, 10.69, 169.39),
-        createData('RMSE huấn luyện giá đóng cửa', 12.12, 12.13, 164.16),
-        createData('RMSE đánh giá giá mở cửa', 16.31, 16.9, 107.22),
-        createData('RMSE đánh giá giá đóng cửa', 19.55, 19.6, 104.21),
-        createData('RMSE kiểm thử giá mở cửa', 20.45, 22.27, 626.7),
-        createData('RMSE kiểm thử giá đóng cửa', 23.69, 23.77, 675.26),
+        createData('RMSE huấn luyện giá mở cửa', 11.94, 12.6, 169.39),
+        createData('RMSE huấn luyện giá đóng cửa', 12.82, 14.17, 164.16),
+        createData('RMSE đánh giá giá mở cửa', 14.74, 15.41, 107.22),
+        createData('RMSE đánh giá giá đóng cửa', 14.74, 17.48, 104.21),
+        createData('RMSE kiểm thử giá mở cửa', 21.16, 22.23, 626.7),
+        createData('RMSE kiểm thử giá đóng cửa', 24.13, 25.58, 675.26),
     ];
     const rows_3 = [
-        createData('RMSE huấn luyện giá mở cửa', 10.95, 11.26, 217.54),
-        createData('RMSE huấn luyện giá đóng cửa', 13.3, 13.56, 198.8),
-        createData('RMSE đánh giá giá mở cửa', 21.77, 19.9, 149.27),
-        createData('RMSE đánh giá giá đóng cửa', 24.49, 23.3, 188.14),
-        createData('RMSE kiểm thử giá mở cửa', 33.24, 23.38, 2080.87),
-        createData('RMSE kiểm thử giá đóng cửa', 36.49, 29.06, 1233.49),
+        createData('RMSE huấn luyện giá mở cửa', 17.1, 18.06, 217.54),
+        createData('RMSE huấn luyện giá đóng cửa', 17.8, 18.7, 198.8),
+        createData('RMSE đánh giá giá mở cửa', 22.01, 22.02, 149.27),
+        createData('RMSE đánh giá giá đóng cửa', 22.82, 21.6, 188.14),
+        createData('RMSE kiểm thử giá mở cửa', 33.97, 32.91, 2080.87),
+        createData('RMSE kiểm thử giá đóng cửa', 35.37, 35.97, 1233.49),
     ];
      const rows_7 = [
-        createData('RMSE huấn luyện giá mở cửa', 21.53, 17.62, 217.54),
-        createData('RMSE huấn luyện giá đóng cửa', 22.73, 18.3, 198.8),
-        createData('RMSE đánh giá giá mở cửa', 33.22, 27.58, 149.27),
-        createData('RMSE đánh giá giá đóng cửa', 31.06, 27.32, 188.14),
-        createData('RMSE kiểm thử giá mở cửa', 68.32, 71.34, 2080.87),
-        createData('RMSE kiểm thử giá đóng cửa', 76.6, 91.0, 1233.49),
+        createData('RMSE huấn luyện giá mở cửa', 29.19, 31.2, 217.54),
+        createData('RMSE huấn luyện giá đóng cửa', 29.85, 31.62, 198.8),
+        createData('RMSE đánh giá giá mở cửa', 30.96, 36.75, 149.27),
+        createData('RMSE đánh giá giá đóng cửa', 31.94, 37.56, 188.14),
+        createData('RMSE kiểm thử giá mở cửa', 76.12, 65.61, 2080.87),
+        createData('RMSE kiểm thử giá đóng cửa', 84.5, 66.8, 1233.49),
     ];
   return (
     <TableContainer component={Paper}>

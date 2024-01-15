@@ -14,20 +14,20 @@ const Navbar: FC = memo(() => (
 		<h3>Main Menu</h3>
 		<ul>
 			<li>
-				<NavbarButton url="/Home" icon="equalizer" title="Home" />
+				<NavbarButton url="/Home" icon="equalizer" title="Trang chủ" />
 			</li>
 			<li>
 				<NavbarButton
 					url="/stockmarket"
 					icon="account_balance"
-					title="Stock Market"
+					title="Thị trường cổ phiếu"
 				/>
 			</li>
 			<li>
 				<NavbarButton
 					url="/MarketScreen"
 					icon="list"
-					title="Watch List"
+					title="Danh sách theo dõi"
 				/>
 			</li>
 
@@ -35,7 +35,7 @@ const Navbar: FC = memo(() => (
 				<NavbarButton
 					url="/stockprediction"
 					icon="sync"
-					title="Stock Prediciton"
+					title="Dự đoán giá cổ phiếu"
 				/>
 			</li>
 		</ul>
